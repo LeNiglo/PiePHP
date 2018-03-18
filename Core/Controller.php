@@ -10,7 +10,13 @@ use Core\TemplateEngine;
 class Controller
 {
 
+    private $_request = NULL;
     private static $_render;
+
+    function __construct()
+    {
+        $this->_request = new Request();
+    }
 
     function __destruct()
     {
