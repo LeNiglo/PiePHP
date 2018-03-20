@@ -8,7 +8,7 @@ namespace Core;
 class Request
 {
 
-    function __construct()
+    public function __construct()
     {
         foreach ($_POST as $key => $value) {
             $this->{$key} = htmlentities(stripcslashes(trim($value)));

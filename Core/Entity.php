@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use \Core\ORM;
+use \Core\Database\ORM;
 
 /**
 *

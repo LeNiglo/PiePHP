@@ -13,12 +13,12 @@ class Controller
     private $_request = NULL;
     private static $_render;
 
-    function __construct()
+    public function __construct()
     {
         $this->_request = new Request();
     }
 
-    function __destruct()
+    public function __destruct()
     {
         echo self::$_render;
     }

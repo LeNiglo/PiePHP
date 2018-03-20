@@ -1,20 +1,20 @@
 <?php
 
-namespace Core;
+namespace Core\Database;
 
-use \Core\Database;
+use \Core\Database\Database;
 
 /**
 *
 */
 class ORM
 {
-    private $db;
+    private $_db;
     private static $_instance = NULL;
 
     function __construct()
     {
-        $this->db = Database::getInstance();
+        $this->_db = Database::getInstance();
     }
 
     public static function getInstance()
@@ -32,7 +32,7 @@ class ORM
             $sql .= "(" . implode(', ', array_keys($fields)) .") " . implode(', ', array_map(function ($p) {
                 return ":$p";
             }, array_keys($fields)));
-            $query = $this->db->prepare($sql);
+            $query = $this->_db->prepare($sql);
 
             foreach ($fields as $p => $v) {
                 $query->bindValue(":$p", $v);
@@ -60,7 +60,7 @@ class ORM
 
 
         $sql .= "WHERE 1" . $this->formatCondition($condition);
-        $query = $this->db->prepare($sql);
+        $query = $this->_db->prepare($sql);
 
         foreach ($fields as $p => $v) {
             $query->bindValue(":$p", $v);
@@ -73,7 +73,7 @@ class ORM
     public function delete($table, $condition = [])
     {
         $sql = "DELETE FROM $table WHERE 1" . $this->formatCondition($condition);
-        $query = $this->db->prepare($sql);
+        $query = $this->_db->prepare($sql);
         $this->bindCondition($query, $condition);
         return $query->execute();
     }
@@ -81,7 +81,7 @@ class ORM
     public function find($table, $condition = [])
     {
         $sql = "SELECT * FROM  $table WHERE 1" . $this->formatCondition($condition);
-        $query = $this->db->prepare($sql);
+        $query = $this->_db->prepare($sql);
         $this->bindCondition($query, $condition);
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_ASSOC);
@@ -91,7 +91,7 @@ class ORM
         $sql = "SELECT * FROM $table WHERE $value IN (" . implode(', ', array_map(function ($p) {
             return ":cond_$p";
         }, array_keys($array))) . ")";
-        $query = $this->db->prepare($sql);
+        $query = $this->_db->prepare($sql);
         $this->bindCondition($query, array_values($array));
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_ASSOC);

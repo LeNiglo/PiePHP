@@ -7,16 +7,27 @@ use \Model\UserModel;
 use \Model\PostModel;
 use \Model\AgencyModel;
 
+use \Core\Database\QueryBuilder;
+
 /**
- *
- */
+*
+*/
 class UserController extends Controller
 {
 
     public function index()
     {
+        echo '<pre>';
+        dd(QueryBuilder::table('user')->where('id_user', '=', 1)->get());
+    }
+
+    public function list()
+    {
         $user = UserModel::find(2);
         $users = UserModel::findAll();
+
+        $user->name = "Cintia";
+        $user->save();
 
         $this->render('user.show', [
             'users' => $users,
@@ -33,7 +44,9 @@ class UserController extends Controller
     {
         $agency = AgencyModel::find(1);
         foreach ($agency->posts as &$p) {
-            $p->tags;
+            foreach ($p->tags as $t) {
+                echo "<p>" . $t->name . "</p>";
+            }
             unset($p);
         }
         dd($agency);
