@@ -18,7 +18,11 @@ class UserController extends Controller
     public function index()
     {
         echo '<pre>';
-        dd(QueryBuilder::table('user')->where('id_user', '=', 1)->get());
+        // dd(QueryBuilder::table('user')->where('id_user', 1)->orWhere('email', 'LIKE', "%epitech.eu")->get());
+        dd(QueryBuilder::table('user')->where('email', 'LIKE', '%gmail.com')->orWhere(function ($q) {
+            $q->where('id_user', 2);
+            return $q;
+        })->get());
     }
 
     public function list()

@@ -18,7 +18,7 @@ class QueryBuilder
     private $_orderBy = [];
     private $_groupBy = [];
     private $_limit = NULL;
-    private $_offset = NUL;
+    private $_offset = NULL;
 
     function __construct($table)
     {
@@ -38,17 +38,15 @@ class QueryBuilder
         } else {
             $select = $this->_select;
         }
+
         $sql = "SELECT {$select} FROM {$this->_table}";
+
         if (count($this->_where) > 0) {
-            $sql .= " WHERE 1";
-            foreach ($this->_where as $value) {
-                $sql .= " AND {$value['column']} {$value['op']} {$value['value']}";
-            }
+            $sql .= " WHERE 1 " . $this->formatConditions();
         }
 
 
         var_dump($this, $sql);
-        // return $sql;
 
         $query = $this->_db->prepare($sql);
 
@@ -60,30 +58,91 @@ class QueryBuilder
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function where($column, $op, $value = NULL)
+    private function formatConditions()
     {
-        if (is_null($value)) {
-            $value = $op;
-            $op = '=';
+        $sql = "";
+        foreach ($this->_where as $value) {
+            if (isset($value['cb'])) {
+                $sql .= " {$value['link']} " . $this->getClosure($value['cb']);
+            } else {
+                $sql .= " {$value['link']} {$value['column']} {$value['op']} {$value['value']}";
+            }
         }
 
-        $this->_where[] = [
-            'column' => $column,
-            'op' => $op,
-            'value' => $this->addBinding($value),
-        ];
+        // if in a closure, remove the first logical keyword
+        if (is_null($this->_table)) {
+            $sql = preg_replace('/^\s*(AND|OR)/', '', $sql);
+        }
+
+        // return a string corresponding the the conditions in the $_where
+        return ltrim($sql);
+    }
+
+    private function getClosure($cb)
+    {
+        // when using a user defined $cb function, create a new instance of
+        // QueryBuilder and set $_table as NULL.
+        $qb = $cb(new QueryBuilder(NULL));
+        // when the $cb is returned, get the corresponding SQL
+        $sql = $qb->formatConditions();
+
+        // finally, append the bindings to the parent instance
+        foreach ($qb->getBindings() as $key => $value) {
+            $sql = str_replace($key, $this->addBinding($value), $sql);
+        }
+
+        return '(' . ltrim($sql) . ')';
+    }
+
+    public function where($column, $op = NULL, $value = NULL)
+    {
+        return $this->stdWhere('AND', $column, $op, $value);
+    }
+
+    public function orWhere($column, $op = NULL, $value = NULL)
+    {
+        return $this->stdWhere('OR', $column, $op, $value);
+    }
+
+    private function stdWhere($logicKeyword, $column, $op = NULL, $value = NULL)
+    {
+        if (!is_callable($column) && is_null($op)) {
+            // if first param is not a callable, we need AT LEAST 2 of them
+            throw new \InvalidArgumentException("Missing Parameter");
+        } else if (is_callable($column)) {
+            // if first param is a callable, add the function to the $_where
+            $this->_where[] = [
+                'link' => $logicKeyword,
+                'cb' => $column,
+            ];
+        } else {
+            // else, it is a basic where query
+            if (is_null($value)) {
+                // if the value is not defined, we use the "=" operator
+                $value = $op;
+                $op = '=';
+            }
+
+            // don't forget to add the binding !
+            $this->_where[] = [
+                'link' => $logicKeyword,
+                'column' => $column,
+                'op' => $op,
+                'value' => $this->addBinding($value),
+            ];
+        }
 
         return $this;
     }
 
     public function whereIn($column, $values)
     {
-
+        return $this;
     }
 
     public function whereBetween($column, $value1, $value2)
     {
-
+        return $this;
     }
 
     private function addBinding($value)
@@ -91,5 +150,10 @@ class QueryBuilder
         $key = ":b_" . count($this->_bindings);
         $this->_bindings[$key] = $value;
         return $key;
+    }
+
+    public function getBindings()
+    {
+        return $this->_bindings;
     }
 }
