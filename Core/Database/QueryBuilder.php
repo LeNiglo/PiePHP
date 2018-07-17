@@ -120,7 +120,8 @@ class QueryBuilder
 
     public function whereBetween($column, $value1, $value2)
     {
-        return $this;
+        $betweenStr = $this->addBinding($value1) . ' AND ' . $this->addBinding($value2);
+        return $this->stdWhere('AND', $column, 'BETWEEN', $betweenStr, true);
     }
 
     private function stdWhere($logicKeyword, $column, $op = NULL, $value = NULL, $bound = false)
