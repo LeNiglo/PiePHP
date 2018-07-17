@@ -19,10 +19,7 @@ class UserController extends Controller
     {
         echo '<pre>';
         // dd(QueryBuilder::table('user')->where('id_user', 1)->orWhere('email', 'LIKE', "%epitech.eu")->get());
-        dd(QueryBuilder::table('user')->where('email', 'LIKE', '%gmail.com')->orWhere(function ($q) {
-            $q->where('id_user', 2);
-            return $q;
-        })->get());
+        dd(QueryBuilder::table('user')->whereIn('id_user', [42, 2, 3])->get());
     }
 
     public function list()

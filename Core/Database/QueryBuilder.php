@@ -104,7 +104,26 @@ class QueryBuilder
         return $this->stdWhere('OR', $column, $op, $value);
     }
 
-    private function stdWhere($logicKeyword, $column, $op = NULL, $value = NULL)
+    public function whereIn($column, $values)
+    {
+        if (is_array($values)) {
+            foreach ($values as &$value) {
+                $value = $this->addBinding($value);
+                unset($value);
+            }
+            $arrayStr = '(' . implode($values, ', ') . ')';
+            return $this->stdWhere('AND', $column, 'IN', $arrayStr, true);
+        }
+
+        return $this;
+    }
+
+    public function whereBetween($column, $value1, $value2)
+    {
+        return $this;
+    }
+
+    private function stdWhere($logicKeyword, $column, $op = NULL, $value = NULL, $bound = false)
     {
         if (!is_callable($column) && is_null($op)) {
             // if first param is not a callable, we need AT LEAST 2 of them
@@ -128,20 +147,10 @@ class QueryBuilder
                 'link' => $logicKeyword,
                 'column' => $column,
                 'op' => $op,
-                'value' => $this->addBinding($value),
+                'value' => $bound ? $value : $this->addBinding($value),
             ];
         }
 
-        return $this;
-    }
-
-    public function whereIn($column, $values)
-    {
-        return $this;
-    }
-
-    public function whereBetween($column, $value1, $value2)
-    {
         return $this;
     }
 
