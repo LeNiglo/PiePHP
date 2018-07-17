@@ -19,7 +19,7 @@ class ORM
 
     public static function getInstance()
     {
-        if (!isset(self::$_instance)) {
+        if (is_null(self::$_instance)) {
             self::$_instance = new ORM();
         }
         return self::$_instance;

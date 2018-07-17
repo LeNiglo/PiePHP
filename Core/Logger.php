@@ -13,7 +13,7 @@ class Logger
 
     public static function getInstance()
     {
-        if (!isset(self::$_instance)) {
+        if (is_null(self::$_instance)) {
             self::$_instance = new Logger();
         }
         return self::$_instance;
