@@ -3,6 +3,7 @@
 namespace Core;
 
 use \Core\Database\ORM;
+use \Core\Database\QueryBuilder;
 
 /**
 *
@@ -63,6 +64,11 @@ class Entity
     public final function __set($property, $value)
     {
         $this->set($property, $value);
+    }
+
+    public static function query()
+    {
+        return new QueryBuilder(static::getTable());
     }
 
     public final function &get($property)
