@@ -19,24 +19,24 @@ class Logger
         return self::$_instance;
     }
 
-    public function error($str = '')
+    public static function error($str = '')
     {
-        $this->write($str, 'ERROR');
+        self::getInstance()->write($str, 'ERROR');
     }
 
-    public function warn($str = '')
+    public static function warn($str = '')
     {
-        $this->write($str, 'WARNING');
+        self::getInstance()->write($str, 'WARNING');
     }
 
-    public function info($str = '')
+    public static function info($str = '')
     {
-        $this->write($str, 'INFO');
+        self::getInstance()->write($str, 'INFO');
     }
 
-    public function debug($str = '')
+    public static function debug($str = '')
     {
-        $this->write($str, 'DEBUG');
+        self::getInstance()->write($str, 'DEBUG');
     }
 
     private function write($str, $level)
