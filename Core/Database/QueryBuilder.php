@@ -3,6 +3,7 @@
 namespace Core\Database;
 
 use \Core\Database\Database;
+use \Core\Logger as Log;
 
 /**
  *
@@ -45,7 +46,6 @@ class QueryBuilder
             $sql .= " WHERE 1 " . $this->formatConditions();
         }
 
-
         var_dump($this, $sql);
 
         $query = $this->_db->prepare($sql);
@@ -80,6 +80,7 @@ class QueryBuilder
 
     private function getClosure($cb)
     {
+        $self = $this;
         // when using a user defined $cb function, create a new instance of
         // QueryBuilder and set $_table as NULL.
         $qb = $cb(new QueryBuilder(NULL));
@@ -87,9 +88,10 @@ class QueryBuilder
         $sql = $qb->formatConditions();
 
         // finally, append the bindings to the parent instance
-        foreach ($qb->getBindings() as $key => $value) {
-            $sql = str_replace($key, $this->addBinding($value), $sql);
-        }
+        $bindings = $qb->getBindings();
+        $sql = preg_replace_callback("/:b_(\d+)/", function ($matches) use ($self, $bindings) {
+            return $self->addBinding($bindings[$matches[0]]);
+        }, $sql);
 
         return '(' . ltrim($sql) . ')';
     }
