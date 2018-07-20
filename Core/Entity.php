@@ -41,7 +41,7 @@ class Entity
         return strtolower(str_replace('Model', '', basename(str_replace('\\', '/', get_called_class())))) . '_id';
     }
 
-    public function getId()
+    public static function getId()
     {
         return static::$_id ?? self::$_id;
     }
