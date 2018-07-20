@@ -31,7 +31,7 @@ class Entity
         return strtolower(str_replace('Model', '', basename(str_replace('\\', '/', get_called_class())))) . 's';
     }
 
-    public function getTable()
+    public static function getTable()
     {
         return static::$_table ?? static::guessTable();
     }
@@ -68,7 +68,7 @@ class Entity
 
     public static function query()
     {
-        return new QueryBuilder(static::getTable());
+        return new QueryBuilder(self::getTable());
     }
 
     public final function &get($property)
