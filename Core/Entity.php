@@ -26,6 +26,21 @@ class Entity
         $this->set($params);
     }
 
+    public static function guessEntity($table)
+    {
+        $possibilities = [
+            '\\Model\\' . ucfirst($table) . 'Model',
+            '\\Model\\' . ucfirst(rtrim($table, 's')) . 'Model'
+        ];
+
+        foreach ($possibilities as $class) {
+            if (class_exists($class) && $class::getTable() === $table) {
+                return $class;
+            }
+        }
+        return null;
+    }
+
     public static function guessTable()
     {
         return strtolower(str_replace('Model', '', basename(str_replace('\\', '/', get_called_class())))) . 's';

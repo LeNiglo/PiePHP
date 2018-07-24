@@ -55,7 +55,11 @@ class QueryBuilder
         }
 
         $query->execute();
+        if (!is_null($class = Entity::guessEntity($this->_table))) {
+            return $query->fetchAll(\PDO::FETCH_CLASS, $class);
+        } else {
             return $query->fetchAll(\PDO::FETCH_ASSOC);
+        }
     }
 
     private function formatConditions()
