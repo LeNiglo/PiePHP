@@ -11,9 +11,7 @@ class Core
     {
         self::dotenv();
         require_once '../routes.php';
-        if (file_exists('../src/helpers.php')) {
-            require_once '../src/helpers.php';
-        }
+        require_once __DIR__ . '/helpers.php';
     }
 
     public function run()
