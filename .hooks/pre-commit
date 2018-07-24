@@ -1,0 +1,3 @@
+#!/bin/sh
+
+php-cs-fixer fix --verbose --show-progress=estimating --rules=@PSR2 .
