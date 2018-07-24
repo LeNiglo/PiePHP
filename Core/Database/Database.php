@@ -7,7 +7,7 @@ namespace Core\Database;
  */
 class Database
 {
-    protected static $_instance = NULL;
+    protected static $_instance = null;
 
     public static function getInstance()
     {
@@ -17,6 +17,10 @@ class Database
         return self::$_instance;
     }
 
-    function __construct() { }
-    function __destruct() { }
+    public function __construct()
+    {
+    }
+    public function __destruct()
+    {
+    }
 }

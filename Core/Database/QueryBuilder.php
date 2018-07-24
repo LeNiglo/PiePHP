@@ -4,24 +4,24 @@ namespace Core\Database;
 
 use \Core\Database\Database;
 use \Core\Logger as Log;
+use \Core\Entity;
 
 /**
- *
- */
+*
+*/
 class QueryBuilder
 {
-
     private $_db;
-    private $_table = NULL;
+    private $_table = null;
     private $_where = [];
     private $_select = '*';
     private $_bindings = [];
     private $_orderBy = [];
     private $_groupBy = [];
-    private $_limit = NULL;
-    private $_offset = NULL;
+    private $_limit = null;
+    private $_offset = null;
 
-    function __construct($table)
+    public function __construct($table)
     {
         $this->_db = Database::getInstance();
         $this->_table = $table;
@@ -46,7 +46,7 @@ class QueryBuilder
             $sql .= " WHERE 1 " . $this->formatConditions();
         }
 
-        var_dump($this, $sql);
+        // dump($this, $sql);
 
         $query = $this->_db->prepare($sql);
 
@@ -55,7 +55,7 @@ class QueryBuilder
         }
 
         $query->execute();
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+            return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     private function formatConditions()
@@ -83,7 +83,7 @@ class QueryBuilder
         $self = $this;
         // when using a user defined $cb function, create a new instance of
         // QueryBuilder and set $_table as NULL.
-        $qb = $cb(new QueryBuilder(NULL));
+        $qb = $cb(new QueryBuilder(null));
         // when the $cb is returned, get the corresponding SQL
         $sql = $qb->formatConditions();
 
@@ -96,12 +96,12 @@ class QueryBuilder
         return '(' . ltrim($sql) . ')';
     }
 
-    public function where($column, $op = NULL, $value = NULL)
+    public function where($column, $op = null, $value = null)
     {
         return $this->stdWhere('AND', $column, $op, $value);
     }
 
-    public function orWhere($column, $op = NULL, $value = NULL)
+    public function orWhere($column, $op = null, $value = null)
     {
         return $this->stdWhere('OR', $column, $op, $value);
     }
@@ -126,12 +126,12 @@ class QueryBuilder
         return $this->stdWhere('AND', $column, 'BETWEEN', $betweenStr, true);
     }
 
-    private function stdWhere($logicKeyword, $column, $op = NULL, $value = NULL, $bound = false)
+    private function stdWhere($logicKeyword, $column, $op = null, $value = null, $bound = false)
     {
         if (!is_callable($column) && is_null($op)) {
             // if first param is not a callable, we need AT LEAST 2 of them
             throw new \InvalidArgumentException("Missing Parameter");
-        } else if (is_callable($column)) {
+        } elseif (is_callable($column)) {
             // if first param is a callable, add the function to the $_where
             $this->_where[] = [
                 'link' => $logicKeyword,

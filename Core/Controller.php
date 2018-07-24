@@ -5,12 +5,11 @@ namespace Core;
 use Core\TemplateEngine;
 
 /**
- *
- */
+*
+*/
 class Controller
 {
-
-    private $_request = NULL;
+    private $_request = null;
     private static $_render;
 
     public function __construct()
@@ -38,7 +37,7 @@ class Controller
             ob_start();
             eval(' ?>'.$tpl->parse($f_tpl));
             $_view = ob_get_clean();
-        } else if (file_exists($f)) {
+        } elseif (file_exists($f)) {
             ob_start();
             include $f;
             $_view = ob_get_clean();
@@ -51,7 +50,7 @@ class Controller
             ob_start();
             eval(' ?>'.$tpl->parse($l_tpl));
             self::$_render = ob_get_clean();
-        } else if (file_exists($l)) {
+        } elseif (file_exists($l)) {
             ob_start();
             include $l;
             self::$_render = ob_get_clean();

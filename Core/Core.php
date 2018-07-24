@@ -7,7 +7,7 @@ namespace Core;
 */
 class Core
 {
-    function __construct()
+    public function __construct()
     {
         self::dotenv();
         require_once '../routes.php';

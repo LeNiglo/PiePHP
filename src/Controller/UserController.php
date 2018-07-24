@@ -14,7 +14,6 @@ use \Core\Database\QueryBuilder;
 */
 class UserController extends Controller
 {
-
     public function index()
     {
         echo '<pre>';

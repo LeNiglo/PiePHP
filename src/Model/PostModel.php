@@ -5,8 +5,8 @@ namespace Model;
 use \Core\Entity;
 
 /**
- *
- */
+*
+*/
 class PostModel extends Entity
 {
     protected $_fields = ['content', 'user_id'];

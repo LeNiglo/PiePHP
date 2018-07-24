@@ -3,8 +3,8 @@
 namespace Core;
 
 /**
- *
- */
+*
+*/
 class Router
 {
     private static $_routes = [];

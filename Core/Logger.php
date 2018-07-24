@@ -8,8 +8,8 @@ namespace Core;
 class Logger
 {
     const LOG_FILENAME = "../logs/piephp.log";
-    protected static $_instance = NULL;
-    private $handle = NULL;
+    protected static $_instance = null;
+    private $handle = null;
 
     public static function getInstance()
     {
@@ -45,11 +45,13 @@ class Logger
         fwrite($this->handle, "[{$date}][{$level}] {$str}" . PHP_EOL);
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->handle = fopen(self::LOG_FILENAME, 'a+');
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         fclose($this->handle);
     }
 }

@@ -10,7 +10,7 @@ use \Core\Database\QueryBuilder;
 */
 class Entity
 {
-    protected static $_table = NULL;
+    protected static $_table = null;
     protected static $_id = 'id';
     protected $_fields = [];
     private $_relationships = [];
@@ -56,12 +56,12 @@ class Entity
         return $this->_original;
     }
 
-    public final function &__get($property)
+    final public function &__get($property)
     {
         return $this->get($property);
     }
 
-    public final function __set($property, $value)
+    final public function __set($property, $value)
     {
         $this->set($property, $value);
     }
@@ -71,9 +71,9 @@ class Entity
         return new QueryBuilder(self::getTable());
     }
 
-    public final function &get($property)
+    final public function &get($property)
     {
-        $value = NULL;
+        $value = null;
         if (method_exists($this, $property)) {
             if (!array_key_exists($property, $this->_relationships)) {
                 $this->_relationships[$property] = $this->$property();
@@ -94,7 +94,7 @@ class Entity
         // Use correct types :)
         foreach ($property as &$value) {
             if ($value == "NULL") {
-                $value = NULL;
+                $value = null;
             } elseif (is_numeric($value)) {
                 $value += 0;
             } elseif (($tmp = \DateTime::createFromFormat('Y-m-d G:i:s', $value)) !== false) {
@@ -112,7 +112,7 @@ class Entity
             ) {
                 $this->_dirty[$p] = true;
                 $this->_properties[$p] = $value;
-            } else if (
+            } elseif (
                 in_array($p, $this->_fields) ||
                 $p == static::getId()
             ) {
@@ -169,7 +169,7 @@ class Entity
         if (!!$results && count($results) > 0) {
             return new $class($results[0]);
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -187,7 +187,7 @@ class Entity
         }
     }
 
-    protected final function hasManyThrough($class, $pivotClass, $fk1 = NULL)
+    final protected function hasManyThrough($class, $pivotClass, $fk1 = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
             throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
@@ -214,7 +214,7 @@ class Entity
         }
     }
 
-    protected final function hasMany($class, $fk = NULL)
+    final protected function hasMany($class, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
             throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
@@ -226,7 +226,7 @@ class Entity
         return $class::findAll([$fk, $this->{static::getId()}]);
     }
 
-    protected final function hasOne($class, $fk = NULL)
+    final protected function hasOne($class, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
             throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
@@ -236,10 +236,10 @@ class Entity
         }
 
         $array = $class::findAll([$fk, $this->{static::getId()}]);
-        return $array[0] ?? NULL;
+        return $array[0] ?? null;
     }
 
-    protected final function belongsToMany($class, $pivotTable, $fk = NULL)
+    final protected function belongsToMany($class, $pivotTable, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
             throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
@@ -263,7 +263,7 @@ class Entity
         }
     }
 
-    protected final function belongsTo($class, $fk = NULL)
+    final protected function belongsTo($class, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
             throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
@@ -273,6 +273,6 @@ class Entity
         }
 
         $array = $class::findAll([$fk, $this->{$class::getId()}]);
-        return $array[0] ?? NULL;
+        return $array[0] ?? null;
     }
 }

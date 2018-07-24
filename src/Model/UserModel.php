@@ -5,8 +5,8 @@ namespace Model;
 use \Core\Entity;
 
 /**
- *
- */
+*
+*/
 class UserModel extends Entity
 {
     protected static $_table = 'user';

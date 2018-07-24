@@ -10,9 +10,9 @@ use \Core\Database\Database;
 class ORM
 {
     private $_db;
-    private static $_instance = NULL;
+    private static $_instance = null;
 
-    function __construct()
+    public function __construct()
     {
         $this->_db = Database::getInstance();
     }
@@ -40,7 +40,7 @@ class ORM
 
             return $query->execute();
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -87,7 +87,8 @@ class ORM
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function findIn($table, $value, $array) {
+    public function findIn($table, $value, $array)
+    {
         $sql = "SELECT * FROM $table WHERE $value IN (" . implode(', ', array_map(function ($p) {
             return ":cond_$p";
         }, array_keys($array))) . ")";

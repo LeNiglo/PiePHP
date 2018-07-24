@@ -3,11 +3,10 @@
 namespace Core;
 
 /**
- *
- */
+*
+*/
 class Request
 {
-
     public function __construct()
     {
         foreach ($_POST as $key => $value) {

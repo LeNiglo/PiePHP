@@ -5,8 +5,8 @@ namespace Model;
 use \Core\Entity;
 
 /**
- *
- */
+*
+*/
 class TagModel extends Entity
 {
     protected $_fields = ['name'];

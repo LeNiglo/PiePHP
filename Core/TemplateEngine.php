@@ -7,14 +7,13 @@ namespace Core;
 */
 class TemplateEngine
 {
-
-    private $content = NULL;
+    private $content = null;
     private $handler = false;
 
     public function parse($file)
     {
         if (!file_exists($file)) {
-            return NULL;
+            return null;
         }
         $this->handler = fopen($file, 'r');
         if ($this->handler) {
