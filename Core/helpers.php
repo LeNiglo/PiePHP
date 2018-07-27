@@ -12,7 +12,7 @@ function dump()
     echo '<pre>';
     $args = func_get_args();
     foreach ($args as $arg) {
-        call_user_func_array('var_dump', $arg);
+        call_user_func_array('var_dump', [$arg]);
     }
     echo '</pre>';
 }
