@@ -25,35 +25,19 @@ class UserController extends Controller
         ]);
     }
 
-    public function list()
+    public function show_me()
     {
-        $user = UserModel::find(2);
-        $users = UserModel::findAll();
-
-        if ($user) {
-            $user->name = "Marine Moynet";
-            $user->save();
-        }
-
-        $this->render('user.show', [
-            'users' => $users,
-            'user' => $user,
-        ]);
+        return $this->show($_SESSION['user_id']);
     }
 
     public function show($id)
     {
-        dd(UserModel::find($id));
-    }
-
-    public function posts()
-    {
-        $users = UserModel::findAll();
-        foreach ($users as $p) {
-            foreach ($p->posts as $p) {
-                $p->tags;
-            }
+        $user = UserModel::query()->where(UserModel::getId(), $id)->orWhere('name', $id)->first();
+        if (is_null($user)) {
+            $this->redirect($this->request->back());
         }
-        dd($users);
+        $this->render('user.show', [
+            'user' => $user,
+        ]);
     }
 }

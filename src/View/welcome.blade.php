@@ -1,14 +1,22 @@
-<h1>Hello {{ $user->name }} !</h1>
+<h1 class="mb-5">Hello {{ $user->name }} !</h1>
 
-@foreach ($user->posts as $post)
-    <div class="col-md-6">
-        <h3>{{ $post->title }}</h3>
+<div class="row">
+    @foreach ($user->posts as $post)
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $post->title }}</h5>
+                    <p class="card-text">{{ strlen($post->content) > 75 ? substr($post->content, 0, 75) . "..." : $post->content }}</p>
+                    <a href="{{ route('/posts/'.$post->id) }}" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
 
-        <p>{{ $post->content }}</p>
-    </div>
-@endforeach
+<hr />
 
-<form action="{{ route('/post/submit') }}" method="post">
+<form action="{{ route('/posts/submit') }}" method="post">
     <input type="hidden" name="user_id" value="{{ $user->id }}" />
 
     <div class="form-group">

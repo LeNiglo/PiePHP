@@ -1,23 +1,15 @@
-<h1 class="page-header">User Show :)</h1>
+<h1 class="mb-5">Blog of {{ $user->name }}</h1>
 
-@isset($user)
-    <div class="well">
-        <h3>
-            Email : {{ $user->email }}
-            <small>(Name : {{ $user->name }})</small>
-        </h3>
-    </div>
-@endisset
-
-@if (count($users) > 0)
-    <hr>
-@endif
-
-@foreach($users as $u)
-    <div class="well" id="user-{{ $u->id }}">
-        <h3>
-            Email : {{ $u->email }}
-            <small>(Name : {{ $u->name }})</small>
-        </h3>
-    </div>
-@endforeach
+<div class="row">
+    @foreach ($user->posts as $post)
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $post->title }}</h5>
+                    <p class="card-text">{{ strlen($post->content) > 75 ? substr($post->content, 0, 75) . "..." : $post->content }}</p>
+                    <a href="{{ route('/posts/'.$post->id) }}" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>

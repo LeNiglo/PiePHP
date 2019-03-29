@@ -28,7 +28,9 @@ class Router
                 $matches = [];
                 if (preg_match("#^$route$#", $url, $matches)) {
                     array_shift($matches);
-                    $params['p'] = $matches;
+                    $params['p'] = array_map(function ($m) {
+                        return utf8_decode(urldecode($m));
+                    }, $matches);
                     return $params;
                 }
             }

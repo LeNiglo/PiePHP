@@ -25,4 +25,22 @@ class PostController extends Controller
         }
         $this->redirect('/');
     }
+
+    public function list()
+    {
+        $this->render('post.list', [
+            'posts' => PostModel::findAll(),
+        ]);
+    }
+
+    public function show($id)
+    {
+        $post = PostModel::find($id);
+        if (is_null($post)) {
+            $this->redirect($this->request->back());
+        }
+        $this->render('post.show', [
+            'post' => $post,
+        ]);
+    }
 }
