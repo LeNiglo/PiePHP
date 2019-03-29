@@ -9,7 +9,7 @@ use \Core\Entity;
 */
 class PostModel extends Entity
 {
-    protected $_fields = ['content', 'user_id'];
+    protected static $_fields = ['title', 'content', 'user_id'];
 
     public function user()
     {

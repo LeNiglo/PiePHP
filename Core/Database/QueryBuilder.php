@@ -62,6 +62,11 @@ class QueryBuilder
         }
     }
 
+    public function first()
+    {
+        return $this->get()[0] ?? null;
+    }
+
     private function formatConditions()
     {
         $sql = "";
@@ -113,10 +118,10 @@ class QueryBuilder
     public function whereIn($column, $values)
     {
         if (is_array($values)) {
-            foreach ($values as &$value) {
-                $value = $this->addBinding($value);
-                unset($value);
-            }
+            array_map(function ($value) {
+                return $this->addBinding($value);
+            }, $values);
+
             $arrayStr = '(' . implode($values, ', ') . ')';
             return $this->stdWhere('AND', $column, 'IN', $arrayStr, true);
         }

@@ -9,7 +9,7 @@ use \Core\Entity;
 */
 class TagModel extends Entity
 {
-    protected $_fields = ['name'];
+    protected static $_fields = ['name'];
 
     public function posts()
     {

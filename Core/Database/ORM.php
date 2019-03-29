@@ -28,17 +28,19 @@ class ORM
     public function insert($table, $fields = [])
     {
         if (count($fields) > 0) {
-            $sql = "INSERT INTO $table VALUES ";
-            $sql .= "(" . implode(', ', array_keys($fields)) .") " . implode(', ', array_map(function ($p) {
+            $sql = "INSERT INTO $table ";
+            $sql .= "(" . implode(', ', array_keys($fields)) .") ";
+            $sql .= "VALUES (" . implode(', ', array_map(function ($p) {
                 return ":$p";
-            }, array_keys($fields)));
+            }, array_keys($fields))) . ")";
             $query = $this->_db->prepare($sql);
 
             foreach ($fields as $p => $v) {
                 $query->bindValue(":$p", $v);
             }
 
-            return $query->execute();
+            $query->execute();
+            return $this->_db->lastInsertId();
         } else {
             return null;
         }
@@ -68,6 +70,7 @@ class ORM
         $this->bindCondition($query, $condition);
 
         $query->execute();
+        return $query->rowCount();
     }
 
     public function delete($table, $condition = [])
@@ -75,7 +78,8 @@ class ORM
         $sql = "DELETE FROM $table WHERE 1" . $this->formatCondition($condition);
         $query = $this->_db->prepare($sql);
         $this->bindCondition($query, $condition);
-        return $query->execute();
+        $query->execute();
+        return $query->rowCount();
     }
 
     public function find($table, $condition = [])
@@ -89,7 +93,8 @@ class ORM
 
     public function findIn($table, $value, $array)
     {
-        $sql = "SELECT * FROM $table WHERE $value IN (" . implode(', ', array_map(function ($p) {
+        $sql = "SELECT * FROM $table WHERE $value IN ";
+        $sql .= "(" . implode(', ', array_map(function ($p) {
             return ":cond_$p";
         }, array_keys($array))) . ")";
         $query = $this->_db->prepare($sql);

@@ -10,16 +10,11 @@ use \Core\Entity;
 class UserModel extends Entity
 {
     protected static $_table = 'user';
-    protected static $_id = 'id_user';
-    protected $_fields = ['name', 'email', 'password', 'agency_id'];
+    protected static $_id = 'id';
+    protected static $_fields = ['name', 'email', 'password',];
 
     public function posts()
     {
         return $this->hasMany('\Model\PostModel');
-    }
-
-    public function agency()
-    {
-        return $this->belongsTo('\Model\AgencyModel');
     }
 }

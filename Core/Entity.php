@@ -12,7 +12,7 @@ class Entity
 {
     protected static $_table = null;
     protected static $_id = 'id';
-    protected $_fields = [];
+    protected static $_fields = [];
     private $_relationships = [];
     private $_properties = [];
     private $_original = [];
@@ -107,7 +107,7 @@ class Entity
         }
 
         // Use correct types :)
-        foreach ($property as &$value) {
+        array_map(function ($value) {
             if ($value == "NULL") {
                 $value = null;
             } elseif (is_numeric($value)) {
@@ -117,8 +117,8 @@ class Entity
             } elseif (is_bool($value)) {
                 settype($value, 'bool');
             }
-            unset($value);
-        }
+            return $value;
+        }, $property);
 
         foreach ($property as $p => $value) {
             if (
@@ -128,7 +128,7 @@ class Entity
                 $this->_dirty[$p] = true;
                 $this->_properties[$p] = $value;
             } elseif (
-                in_array($p, $this->_fields) ||
+                in_array($p, static::$_fields) ||
                 $p == static::getId()
             ) {
                 $this->_original[$p] = $value;
@@ -148,15 +148,7 @@ class Entity
 
     public function insert()
     {
-        $values = [];
-
-        foreach ($this->_dirty as $p => $is_dirty) {
-            if ($is_dirty) {
-                $values[$p] = $this->_properties[$p];
-            }
-        }
-        $this->_dirty = [];
-        return ORM::getInstance()->insert(static::getTable(), $values);
+        return ORM::getInstance()->insert(static::getTable(), $this->_properties);
     }
 
     public function update()
@@ -168,12 +160,16 @@ class Entity
             }
         }
         $this->_dirty = [];
-        return ORM::getInstance()->update(static::getTable(), [static::getId() => $this->_original[static::getId()]], $values);
+        if (count($values) > 0) {
+            return ORM::getInstance()->update(static::getTable(), [static::getId() => $this->_original[static::getId()]], $values);
+        }
     }
 
     public function delete()
     {
-        return ORM::getInstance()->delete(static::getTable(), [static::getId() => $this->_original[static::getId()]]);
+        if (isset($this->_original[static::getId()])) {
+            return ORM::getInstance()->delete(static::getTable(), [static::getId() => $this->_original[static::getId()]]);
+        }
     }
 
     public static function find($id)
