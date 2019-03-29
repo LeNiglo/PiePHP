@@ -9,12 +9,12 @@ use Core\TemplateEngine;
 */
 class Controller
 {
-    private $_request = null;
+    protected $request = null;
     private static $_render;
 
     public function __construct()
     {
-        $this->_request = new Request();
+        $this->request = new Request();
     }
 
     public function __destruct()
@@ -58,5 +58,10 @@ class Controller
             echo "Layout '$l' not found.";
             die;
         }
+    }
+
+    protected function redirect($route = '/')
+    {
+        header('Location: ' . route($route));
     }
 }

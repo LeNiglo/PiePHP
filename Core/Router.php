@@ -38,7 +38,7 @@ class Router
 
     private static function cleanUrl($url)
     {
-        $url = explode('?', trim($url))[0];
+        $url = explode('?', str_replace(BASE_URI, '', trim($url)))[0];
         if ($url !== '/') {
             $url = rtrim($url, '/');
         }

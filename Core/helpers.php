@@ -17,6 +17,16 @@ function dump()
     echo '</pre>';
 }
 
+function route($path = '')
+{
+    return BASE_URI . '/' . trim($path, '/');
+}
+
+function asset($path = '')
+{
+    return BASE_URI . '/public/' . trim($path, '/');
+}
+
 if (file_exists('../src/helpers.php')) {
     require_once '../src/helpers.php';
 }
