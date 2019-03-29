@@ -21,9 +21,9 @@ class Router
             return self::$_routes[$url];
         } else {
             foreach (self::$_routes as $route => $params) {
-                $route = preg_replace_callback('/{([a-zA-Z]+)}/', function (array $matches) use ($params) {
+                $route = preg_replace_callback('/{([a-zA-Z]+?)}/', function (array $matches) use ($params) {
                     array_shift($matches);
-                    return isset($params['p'][$matches[0]]) ? "({$params['p'][$matches[0]]})" : "(.+)";
+                    return isset($params['p'][$matches[0]]) ? "({$params['p'][$matches[0]]})" : "(.+?)";
                 }, $route);
                 $matches = [];
                 if (preg_match("#^$route$#", $url, $matches)) {

@@ -78,10 +78,10 @@ class TemplateEngine
     private function parseEcho(&$line)
     {
         $line = preg_replace_callback_array([
-            "/{{\s+(.*)\s+}}/" => function ($matches) {
+            "/{{\s+(.*?)\s+}}/" => function ($matches) {
                 return "<?= htmlentities({$matches[1]}) ?>";
             },
-            "/{!!\s+(.*)\s+!!}/" => function ($matches) {
+            "/{!!\s+(.*?)\s+!!}/" => function ($matches) {
                 return "<?= $matches[1] ?>";
             }
         ], $line);
