@@ -33,6 +33,7 @@ class TemplateEngine
         $this->parseFor($line);
         $this->parseAdv($line);
         $this->parseEcho($line);
+        $this->parseComment($line);
         return $line;
     }
 
@@ -83,6 +84,14 @@ class TemplateEngine
             },
             "/{!!\s+(.*?)\s+!!}/" => function ($matches) {
                 return "<?= $matches[1] ?>";
+            }
+        ], $line);
+    }
+    private function parseComment(&$line)
+    {
+        $line = preg_replace_callback_array([
+            "/{{--\s+(.*?)\s+--}}/" => function ($matches) {
+                return '';
             }
         ], $line);
     }
