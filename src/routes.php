@@ -11,5 +11,4 @@ Router::connect('/u/{id}', ['c' => 'user', 'a' => 'show']);
 
 Router::connect('/posts', ['c' => 'post', 'a' => 'list']);
 Router::connect('/posts/{id}', ['c' => 'post', 'a' => 'show', 'p' => ['id' => '[0-9]+']]);
-
 Router::connect('/posts/submit', ['c' => 'post', 'a' => 'submit']);
