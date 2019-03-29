@@ -5,7 +5,6 @@ namespace Controller;
 use \Core\Controller;
 use \Model\UserModel;
 use \Model\PostModel;
-use \Model\AgencyModel;
 
 use \Core\Database\QueryBuilder;
 
@@ -16,12 +15,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        echo '<pre>';
-        dd(UserModel::query()->where('id_user', 1)->orWhere(function ($q1) {
-            return $q1->where('email', 'LIKE', "%cintia%")->orWhere(function ($q2) {
-                return $q2->whereBetween('id_user', 3, 6);
-            })->orWhere('agency_id', 42);
-        })->get());
+        if (!$_SESSION['user_id']) {
+            $this->redirect('/login');
+        }
+        $user = UserModel::find($_SESSION['user_id']);
+
+        $this->render('welcome', [
+            'user' => $user,
+        ]);
     }
 
     public function list()
@@ -29,8 +30,10 @@ class UserController extends Controller
         $user = UserModel::find(2);
         $users = UserModel::findAll();
 
-        $user->name = "Cintia";
-        $user->save();
+        if ($user) {
+            $user->name = "Marine Moynet";
+            $user->save();
+        }
 
         $this->render('user.show', [
             'users' => $users,
@@ -45,13 +48,12 @@ class UserController extends Controller
 
     public function posts()
     {
-        $agency = AgencyModel::find(1);
-        foreach ($agency->posts as &$p) {
-            foreach ($p->tags as $t) {
-                echo "<p>" . $t->name . "</p>";
+        $users = UserModel::findAll();
+        foreach ($users as $p) {
+            foreach ($p->posts as $p) {
+                $p->tags;
             }
-            unset($p);
         }
-        dd($agency);
+        dd($users);
     }
 }
