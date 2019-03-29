@@ -1,0 +1,13 @@
+RewriteEngine On
+# RewriteBase /Projects/wac/PiePHP/
+# RewriteCond %{REQUEST_FILENAME} !-f [OR]
+# RewriteCond %{REQUEST_URI} !^/Projects/wac/PiePHP/(public/.+|index\.php|robots\.txt)$
+# RewriteRule ^ index.php [QSA,L]
+# RewriteRule ^(.*)$ public/$1 [L]
+
+RewriteRule ^public/ - [L]
+
+RewriteCond ${DOCUMENT_ROOT}/public/$1 -f
+RewriteRule (.+) public/$1 [L]
+
+RewriteRule (.*) public/index.php [L,QSA]

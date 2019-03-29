@@ -41,6 +41,9 @@ class Logger
 
     private function write($str, $level)
     {
+        if (!is_string($str)) {
+            $str = json_encode($str);
+        }
         $date = date("Y-m-d H:i:s");
         fwrite($this->handle, "[{$date}][{$level}] {$str}" . PHP_EOL);
     }
