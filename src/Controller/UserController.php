@@ -15,13 +15,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        if (!\Auth::check()) {
-            $this->redirect('/login');
-        }
-        $user = \Auth::user();
-
         $this->render('welcome', [
-            'user' => $user,
+            
         ]);
     }
 

@@ -14,6 +14,9 @@ class Auth
 
     public static function check()
     {
+        if (!is_null(static::$_user)) {
+            return true;
+        }
         if (isset($_SESSION[static::AUTH_KEY])) {
             $u = static::getAuthModel()::find($_SESSION[static::AUTH_KEY]);
             if (!is_null($u)) {
