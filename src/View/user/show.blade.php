@@ -13,3 +13,23 @@
         </div>
     @endforeach
 </div>
+
+@if (Auth::id() === $user->id)
+    <hr />
+
+    <form action="{{ route('/posts/submit') }}" method="post">
+        <input type="hidden" name="user_id" value="{{ $user->id }}" />
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input class="form-control" type="text" name="title" id="title" />
+        </div>
+
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea class="form-control" name="content" id="content"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-dark">Post</button>
+    </form>
+@endif

@@ -13,21 +13,16 @@ class AuthController extends Controller
 {
     public function login()
     {
+        if (\Auth::check()) {
+            $this->redirect('/u');
+        }
         $error = null;
         if ($this->request->method() === 'POST') {
-            $user = UserModel::query()->where('email', $this->request->email)->first();
-            if ($user) {
-                if (password_verify($this->request->password, $user->password)) {
-                    $_SESSION['user_id'] = $user->id;
-                    $this->redirect('/');
-                } else {
-                    $error = 'Invalid password.';
-                }
-            } else {
-                $error = 'User not found.';
+            $error = \Auth::attempt($this->request->email, $this->request->password);
+            if ($error === true) {
+                $this->redirect('/u');
             }
         }
-        dump($error);
         $this->render('user.auth.login', [
             'error' => $error,
         ]);
@@ -35,6 +30,9 @@ class AuthController extends Controller
 
     public function register()
     {
+        if (\Auth::check()) {
+            $this->redirect('/u');
+        }
         $error = null;
         if ($this->request->method() === 'POST') {
             $user = new UserModel([
@@ -48,5 +46,11 @@ class AuthController extends Controller
         $this->render('user.auth.register', [
             'error' => $error,
         ]);
+    }
+
+    public function logout()
+    {
+        \Auth::logout();
+        $this->redirect('/login');
     }
 }

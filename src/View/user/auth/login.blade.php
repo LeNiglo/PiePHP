@@ -1,4 +1,9 @@
 <form action="{{ route('/login') }}" method="post">
+
+    @isset($error)
+        <div class="alert alert-danger" role="alert">{{ $error }}</div>
+    @endisset
+
     <div class="form-group">
         <label for="email">Email</label>
         <input class="form-control" type="email" name="email" id="email" />

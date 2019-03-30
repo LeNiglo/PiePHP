@@ -15,10 +15,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        if (!$_SESSION['user_id']) {
+        if (!\Auth::check()) {
             $this->redirect('/login');
         }
-        $user = UserModel::find($_SESSION['user_id']);
+        $user = \Auth::user();
 
         $this->render('welcome', [
             'user' => $user,
@@ -27,7 +27,10 @@ class UserController extends Controller
 
     public function show_me()
     {
-        return $this->show($_SESSION['user_id']);
+        if (!\Auth::check()) {
+            $this->redirect('/login');
+        }
+        return $this->show(\Auth::id());
     }
 
     public function show($id)

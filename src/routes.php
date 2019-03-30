@@ -4,6 +4,7 @@ use \Core\Router;
 
 Router::connect('/register', ['c' => 'auth', 'a' => 'register']);
 Router::connect('/login', ['c' => 'auth', 'a' => 'login']);
+Router::connect('/logout', ['c' => 'auth', 'a' => 'logout']);
 
 Router::connect('/', ['c' => 'user', 'a' => 'index']);
 Router::connect('/u', ['c' => 'user', 'a' => 'show_me']);

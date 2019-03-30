@@ -63,5 +63,6 @@ class Controller
     protected function redirect($route = '/')
     {
         header('Location: ' . route($route));
+        die;
     }
 }
