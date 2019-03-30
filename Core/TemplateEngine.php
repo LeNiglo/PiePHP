@@ -92,6 +92,12 @@ class TemplateEngine
         $line = preg_replace_callback_array([
             "/{{--\s+(.*?)\s+--}}/" => function ($matches) {
                 return '';
+            },
+            "/@[p][h][p]/" => function ($matches) {
+                return '<?php ';
+            },
+            "/@[e][n][d][p][h][p]/" => function ($matches) {
+                return ' ?>';
             }
         ], $line);
     }

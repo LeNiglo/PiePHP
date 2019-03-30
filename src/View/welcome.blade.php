@@ -1,4 +1,9 @@
-<h1 class="mb-5">Hello {{ $user->name }} !</h1>
+@php
+$user = Auth::user();
+echo "bonjour !";
+@endphp
+
+<h1 class="mb-5">Hello {{ $user->name ?? 'Anon' }} !</h1>
 
 <div class="row">
     @foreach ($user->posts as $post)
