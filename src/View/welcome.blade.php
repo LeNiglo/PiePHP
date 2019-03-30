@@ -1,12 +1,7 @@
-@php
-$user = Auth::user();
-echo "bonjour !";
-@endphp
-
-<h1 class="mb-5">Hello {{ $user->name ?? 'Anon' }} !</h1>
+<h1 class="mb-5">Hello {{ Auth::user()->name ?? 'Anon' }} !</h1>
 
 <div class="row">
-    @foreach ($user->posts as $post)
+    @foreach ($posts as $post)
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">

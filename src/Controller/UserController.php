@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         $this->render('welcome', [
-            
+            'posts' => PostModel::query()->orderBy('id', 'DESC')->limit(1)->get(),
         ]);
     }
 

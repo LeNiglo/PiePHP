@@ -46,7 +46,22 @@ class QueryBuilder
             $sql .= " WHERE 1 " . $this->formatConditions();
         }
 
-        // dump($this, $sql);
+        if (count($this->_orderBy) > 0) {
+            $sql .= " ORDER BY " . implode(', ', array_map(function ($o) {
+                return "{$o['column']} {$o['order']}";
+            }, $this->_orderBy));
+        }
+
+        if (!is_null($this->_limit)) {
+            $sql .= " LIMIT ";
+            if (!is_null($this->_offset)) {
+                $sql .= "{$this->_offset}, ";
+            }
+            $sql .= "{$this->_limit}";
+        }
+
+        Log::getInstance()->debug($this);
+        Log::getInstance()->debug($sql);
 
         $query = $this->_db->prepare($sql);
 
@@ -162,6 +177,24 @@ class QueryBuilder
                 'value' => $bound ? $value : $this->addBinding($value),
             ];
         }
+
+        return $this;
+    }
+
+    public function orderBy($column, $order = 'ASC')
+    {
+        $this->_orderBy[] = [
+            'column' => $column,
+            'order' => $order,
+        ];
+
+        return $this;
+    }
+
+    public function limit($limit, $offset = null)
+    {
+        $this->_limit = $limit;
+        $this->_offset = $offset;
 
         return $this;
     }
