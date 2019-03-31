@@ -12,6 +12,13 @@ use \Model\PostModel;
 */
 class PostController extends Controller
 {
+    public function index()
+    {
+        $this->render('welcome', [
+            'posts' => PostModel::query()->orderBy('id', 'DESC')->limit(1)->get(),
+        ]);
+    }
+
     public function submit()
     {
         if ($this->request->method() === 'POST') {

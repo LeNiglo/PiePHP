@@ -18,4 +18,4 @@ PHP Framework from scratch
 - [ ] Logger as a Facade
 - [ ] Authenticable Trait or Interface (extends Entity)
 - [ ] Router with name
-- [ ] Router with Laravel format 'Controller@method'
+- [x] Router with Laravel format 'Controller@method'

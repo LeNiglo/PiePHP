@@ -4,7 +4,6 @@ namespace Controller;
 
 use \Core\Controller;
 use \Model\UserModel;
-use \Model\PostModel;
 
 use \Core\Database\QueryBuilder;
 
@@ -13,13 +12,6 @@ use \Core\Database\QueryBuilder;
 */
 class UserController extends Controller
 {
-    public function index()
-    {
-        $this->render('welcome', [
-            'posts' => PostModel::query()->orderBy('id', 'DESC')->limit(1)->get(),
-        ]);
-    }
-
     public function show_me()
     {
         if (!\Auth::check()) {

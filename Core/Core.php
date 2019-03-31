@@ -20,15 +20,7 @@ class Core
     {
         try {
             $route = Router::get($_SERVER['REQUEST_URI']);
-            $controllerName = 'Controller\\' . ucfirst($route['c']) . 'Controller';
-            $actionName = $route['a'];
-
-            if (class_exists($controllerName)) {
-                $controller = new $controllerName();
-                if (method_exists($controller, $actionName)) {
-                    call_user_func_array([$controller, $actionName], $route['p'] ?? []);
-                }
-            }
+            $route->callable->__invoke($route->params);
         } catch (\Exception $e) {
             dd($e);
         }
