@@ -8,7 +8,7 @@ use \Core\Database\QueryBuilder;
 /**
 *
 */
-class Entity
+abstract class Entity
 {
     protected static $_table = null;
     protected static $_id = 'id';
@@ -187,12 +187,74 @@ class Entity
     public static function findAll($conditions = [])
     {
         $class = get_called_class();
-        $results = ORM::getInstance()->find(static::getTable());
+        $results = ORM::getInstance()->find(static::getTable(), $conditions);
 
         if (!!$results && count($results) > 0) {
             return array_map(function ($entity) use ($class) {
                 return new $class($entity);
             }, $results);
+        } else {
+            return [];
+        }
+    }
+
+    final protected function hasMany($class, $fk = null)
+    {
+        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
+            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+        }
+        if (is_null($fk)) {
+            $fk = static::guessId();
+        }
+
+        return $class::findAll([$fk => $this->{static::getId()}]);
+    }
+
+    final protected function hasOne($class, $fk = null)
+    {
+        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
+            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+        }
+        if (is_null($fk)) {
+            $fk = $class::guessId();
+        }
+
+        $array = $class::findAll([$fk => $this->{static::getId()}]);
+        return $array[0] ?? null;
+    }
+
+    final protected function belongsTo($class, $fk = null)
+    {
+        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
+            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+        }
+        if (is_null($fk)) {
+            $fk = $class::getId();
+        }
+
+        $array = $class::findAll([$fk => $this->{$class::guessId()}]);
+        return $array[0] ?? null;
+    }
+
+    final protected function belongsToMany($class, $pivotTable, $fk = null)
+    {
+        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
+            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+        }
+        if (is_null($fk)) {
+            $fk = $class::guessId();
+        }
+
+        $pivotArray = ORM::getInstance()->find($pivotTable, [static::guessId() => $this->{static::getId()}]);
+        $pivotArray = array_map(function ($a) use ($fk) {
+            return $a[$fk];
+        }, $pivotArray);
+
+        $array = Orm::getInstance()->findIn($class::getTable(), $class::getId(), $pivotArray);
+        if (!!$array && count($array) > 0) {
+            return array_map(function ($entity) use ($class) {
+                return new $class($entity);
+            }, $array);
         } else {
             return [];
         }
@@ -225,65 +287,4 @@ class Entity
         }
     }
 
-    final protected function hasMany($class, $fk = null)
-    {
-        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
-        }
-        if (is_null($fk)) {
-            $fk = $class::guessId();
-        }
-
-        return $class::findAll([$fk, $this->{static::getId()}]);
-    }
-
-    final protected function hasOne($class, $fk = null)
-    {
-        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
-        }
-        if (is_null($fk)) {
-            $fk = $class::guessId();
-        }
-
-        $array = $class::findAll([$fk, $this->{static::getId()}]);
-        return $array[0] ?? null;
-    }
-
-    final protected function belongsToMany($class, $pivotTable, $fk = null)
-    {
-        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
-        }
-        if (is_null($fk)) {
-            $fk = $class::guessId();
-        }
-
-        $pivotArray = ORM::getInstance()->find($pivotTable, [static::guessId() => $this->{static::getId()}]);
-        $pivotArray = array_map(function ($a) use ($fk) {
-            return $a[$fk];
-        }, $pivotArray);
-
-        $array = Orm::getInstance()->findIn($class::getTable(), $class::getId(), $pivotArray);
-        if (!!$array && count($array) > 0) {
-            return array_map(function ($entity) use ($class) {
-                return new $class($entity);
-            }, $array);
-        } else {
-            return [];
-        }
-    }
-
-    final protected function belongsTo($class, $fk = null)
-    {
-        if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
-        }
-        if (is_null($fk)) {
-            $fk = $class::guessId();
-        }
-
-        $array = $class::findAll([$fk, $this->{$class::getId()}]);
-        return $array[0] ?? null;
-    }
 }

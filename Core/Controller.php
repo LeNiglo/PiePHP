@@ -62,7 +62,11 @@ class Controller
 
     protected function redirect($route = '/')
     {
-        header('Location: ' . route($route));
+        if (substr($route, 0, 4) === 'http') {
+            header('Location: ' . $route);
+        } else {
+            header('Location: ' . route($route));
+        }
         die;
     }
 }

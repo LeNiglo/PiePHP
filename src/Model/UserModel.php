@@ -15,6 +15,6 @@ class UserModel extends Entity
 
     public function posts()
     {
-        return $this->hasMany('\Model\PostModel');
+        return $this->hasMany(\Model\PostModel::class);
     }
 }

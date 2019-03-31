@@ -13,6 +13,6 @@ class TagModel extends Entity
 
     public function posts()
     {
-        return $this->belongsToMany('\Model\PostModel', 'posts_tags');
+        return $this->belongsToMany(\Model\PostModel::class, 'posts_tags');
     }
 }

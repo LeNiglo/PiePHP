@@ -13,11 +13,11 @@ class PostModel extends Entity
 
     public function user()
     {
-        return $this->belongsTo('\Model\UserModel');
+        return $this->belongsTo(\Model\UserModel::class);
     }
 
     public function tags()
     {
-        return $this->belongsToMany('\Model\TagModel', 'posts_tags');
+        return $this->belongsToMany(\Model\TagModel::class, 'posts_tags');
     }
 }
