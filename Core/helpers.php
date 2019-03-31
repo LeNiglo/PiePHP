@@ -20,7 +20,8 @@ function dump()
 function route($name = '', $params = [])
 {
     $route = \Core\Router::findNamedRoute($name, $params);
-    return BASE_URI . '/' . trim($route ?? $name, '/');;
+    return BASE_URI . '/' . trim($route ?? $name, '/');
+    ;
 }
 
 function asset($path = '')
