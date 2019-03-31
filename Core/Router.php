@@ -13,6 +13,8 @@ class Router
     {
         $url = self::cleanUrl($url);
         self::$_routes[$url] = new class {
+            public $controller = null;
+            public $action = null;
             public $callable = null;
             public $params = [];
             public $name = null;
@@ -32,7 +34,10 @@ class Router
 
         if (is_string($route)) {
             $expl = explode('@', $route);
-            self::$_routes[$url]->callable = self::createCallable("\\Controller\\{$expl[0]}", $expl[1]);
+            $expl[0] = "\\Controller\\{$expl[0]}";
+            self::$_routes[$url]->controller = $expl[0];
+            self::$_routes[$url]->action = $expl[1];
+            self::$_routes[$url]->callable = self::createCallable($expl[0], $expl[1]);
         } elseif (is_callable($route)) {
             self::$_routes[$url]->callable = self::createCallable($route);
         }

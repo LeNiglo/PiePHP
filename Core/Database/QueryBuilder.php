@@ -3,7 +3,6 @@
 namespace Core\Database;
 
 use \Core\Database\Database;
-use \Core\Logger as Log;
 use \Core\Entity;
 
 /**
@@ -60,8 +59,8 @@ class QueryBuilder
             $sql .= "{$this->_limit}";
         }
 
-        Log::getInstance()->debug($this);
-        Log::getInstance()->debug($sql);
+        \Log::debug($this);
+        \Log::debug($sql);
 
         $query = $this->_db->prepare($sql);
 

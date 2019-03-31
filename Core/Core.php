@@ -46,6 +46,7 @@ class Core
     {
         $facades = [
             'Auth' => \Core\Facade\Auth::class,
+            'Log' => \Core\Facade\Log::class,
         ];
 
         foreach ($facades as $facade => $class) {
