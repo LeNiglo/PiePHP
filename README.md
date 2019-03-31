@@ -15,7 +15,7 @@ PHP Framework from scratch
 - [x] Fix relationships too permissive (see /u/{id})
 - [ ] Migrations based on Entity
 - [ ] Aggregates in QueryBuilder
-- [ ] Logger as a Facade
+- [x] Logger as a Facade
 - [ ] Authenticable Trait or Interface (extends Entity)
-- [ ] Router with name
+- [x] Router with name
 - [x] Router with Laravel format 'Controller@method'

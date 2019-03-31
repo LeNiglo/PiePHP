@@ -9,6 +9,21 @@ class Router
 {
     private static $_routes = [];
 
+    public static function findNamedRoute($name, $params = [])
+    {
+        foreach (self::$_routes as $url => $route) {
+            if ($route->name === $name) {
+                if (!empty($params)) {
+                    foreach ($params as $key => $value) {
+                        $url = preg_replace("/\{$key\}/", $value, $url);
+                    }
+                }
+                return $url;
+            }
+        }
+        return null;
+    }
+
     public static function &connect($url, $route)
     {
         $url = self::cleanUrl($url);
@@ -22,6 +37,7 @@ class Router
             public function name($value)
             {
                 $this->name = $value;
+                return $this;
             }
 
             public function params($value)
@@ -29,6 +45,7 @@ class Router
                 if (is_array($value)) {
                     $this->params = $value;
                 }
+                return $this;
             }
         };
 
@@ -49,6 +66,7 @@ class Router
     {
         $url = self::cleanUrl($url);
         if (array_key_exists($url, self::$_routes)) {
+            \Log::debug(self::$_routes[$url]);
             return self::$_routes[$url];
         } else {
             foreach (self::$_routes as $route_url => $route) {
@@ -62,6 +80,7 @@ class Router
                     $route->params = array_map(function ($m) {
                         return utf8_decode(urldecode($m));
                     }, $matches);
+                    \Log::debug($route);
                     return $route;
                 }
             }

@@ -1,4 +1,4 @@
-<form action="{{ route('/register') }}" method="post">
+<form action="{{ route('register') }}" method="post">
     <div class="form-group">
         <label for="email">Email</label>
         <input class="form-control" type="email" name="email" id="email" />

@@ -1,4 +1,4 @@
-<form action="{{ route('/login') }}" method="post">
+<form action="{{ route('login') }}" method="post">
 
     @isset($error)
         <div class="alert alert-danger" role="alert">{{ $error }}</div>

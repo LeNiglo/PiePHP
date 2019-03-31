@@ -17,9 +17,10 @@ function dump()
     echo '</pre>';
 }
 
-function route($path = '')
+function route($name = '', $params = [])
 {
-    return BASE_URI . '/' . trim($path, '/');
+    $route = \Core\Router::findNamedRoute($name, $params);
+    return BASE_URI . '/' . trim($route ?? $name, '/');;
 }
 
 function asset($path = '')
