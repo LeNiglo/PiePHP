@@ -286,5 +286,4 @@ abstract class Entity
             return [];
         }
     }
-
 }
