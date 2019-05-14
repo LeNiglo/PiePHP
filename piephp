@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+
+require_once(implode(DIRECTORY_SEPARATOR, ['Core', 'autoload.php']));
+
+$cli = new \Core\CLI\CLI;
+$cli->run($argv);

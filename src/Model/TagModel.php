@@ -2,11 +2,8 @@
 
 namespace Model;
 
-use \Core\Entity;
+use Core\Entity;
 
-/**
-*
-*/
 class TagModel extends Entity
 {
     protected static $_fields = ['name'];

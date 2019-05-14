@@ -2,9 +2,6 @@
 
 namespace Core\Facade;
 
-/**
-*
-*/
 class Auth
 {
     const AUTH_KEY = 'piephp_user_id';
@@ -21,13 +18,14 @@ class Auth
             $u = static::getAuthModel()::find($_SESSION[static::AUTH_KEY]);
             if (!is_null($u)) {
                 static::$_user = $u;
+
                 return true;
-            } else {
-                return false;
             }
-        } else {
+
             return false;
         }
+
+        return false;
     }
 
     public static function attempt($email, $password)
@@ -40,24 +38,26 @@ class Auth
         if ($user) {
             if (password_verify($password, $user->password)) {
                 static::$_user = $user;
-                $_SESSION[static::AUTH_KEY] = static::$_user->$auth_id;
+                $_SESSION[static::AUTH_KEY] = static::$_user->{$auth_id};
+
                 return true;
-            } else {
-                $error = 'Invalid password.';
             }
+            $error = 'Invalid password.';
         } else {
             $error = 'User not found.';
         }
+
         return $error;
     }
 
     public static function user()
     {
         if (is_null(static::$_user)) {
-            if (static::check() === false) {
+            if (false === static::check()) {
                 return null;
             }
         }
+
         return static::$_user;
     }
 
@@ -65,7 +65,8 @@ class Auth
     {
         $auth_class = static::getAuthModel();
         $auth_id = $auth_class::getId();
-        return static::user()->$auth_id;
+
+        return static::user()->{$auth_id};
     }
 
     public static function logout()

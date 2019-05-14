@@ -2,9 +2,6 @@
 
 namespace Core;
 
-/**
-*
-*/
 class Router
 {
     private static $_routes = [];
@@ -70,16 +67,20 @@ class Router
             return self::$_routes[$url];
         } else {
             foreach (self::$_routes as $route_url => $route) {
-                $route_url = preg_replace_callback('/{([a-zA-Z]+?)}/', function (array $matches) use ($route) {
-                    array_shift($matches);
-                    return !empty($route->params[$matches[0]]) ? "({$route->params[$matches[0]]})" : "(.+?)";
-                }, $route_url);
+                $route_url = preg_replace_callback(
+                    '/{([a-zA-Z]+?)}/', function (array $matches) use ($route) {
+                        array_shift($matches);
+                        return !empty($route->params[$matches[0]]) ? "({$route->params[$matches[0]]})" : "(.+?)";
+                    }, $route_url
+                );
                 $matches = [];
                 if (preg_match("#^$route_url$#", $url, $matches)) {
                     array_shift($matches);
-                    $route->params = array_map(function ($m) {
-                        return utf8_decode(urldecode($m));
-                    }, $matches);
+                    $route->params = array_map(
+                        function ($m) {
+                            return utf8_decode(urldecode($m));
+                        }, $matches
+                    );
                     \Log::debug($route);
                     return $route;
                 }

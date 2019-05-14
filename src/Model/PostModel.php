@@ -2,11 +2,8 @@
 
 namespace Model;
 
-use \Core\Entity;
+use Core\Entity;
 
-/**
-*
-*/
 class PostModel extends Entity
 {
     protected static $_fields = ['title', 'content', 'user_id'];

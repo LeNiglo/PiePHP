@@ -2,13 +2,9 @@
 
 namespace Controller;
 
-use \Core\Controller;
+use Core\Controller;
+use Model\UserModel;
 
-use \Model\UserModel;
-
-/**
-*
-*/
 class AuthController extends Controller
 {
     public function login()
@@ -17,15 +13,17 @@ class AuthController extends Controller
             $this->redirect('/u');
         }
         $error = null;
-        if ($this->request->method() === 'POST') {
+        if ('POST' === $this->request->method()) {
             $error = \Auth::attempt($this->request->email, $this->request->password);
-            if ($error === true) {
+            if (true === $error) {
                 $this->redirect('/u');
             }
         }
-        $this->render('user.auth.login', [
+        $this->render(
+            'user.auth.login', [
             'error' => $error,
-        ]);
+            ]
+        );
     }
 
     public function register()
@@ -34,18 +32,22 @@ class AuthController extends Controller
             $this->redirect('/u');
         }
         $error = null;
-        if ($this->request->method() === 'POST') {
-            $user = new UserModel([
+        if ('POST' === $this->request->method()) {
+            $user = new UserModel(
+                [
                 'name' => $this->request->name,
                 'email' => $this->request->email,
                 'password' => password_hash($this->request->password, PASSWORD_BCRYPT),
-            ]);
+                ]
+            );
             $user->save();
             $this->redirect('/login');
         }
-        $this->render('user.auth.register', [
+        $this->render(
+            'user.auth.register', [
             'error' => $error,
-        ]);
+            ]
+        );
     }
 
     public function logout()

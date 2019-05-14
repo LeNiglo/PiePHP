@@ -4,9 +4,6 @@ namespace Core\Facade;
 
 use Core\Logger;
 
-/**
-*
-*/
 class Log
 {
     public static function error($str = '')

@@ -1,3 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
-php-cs-fixer fix --verbose --show-progress=estimating --rules=@PSR2 .
+# php-cs-fixer fix --config=.php_cs.dist --verbose --show-progress=estimating .
+
+echo $-;
+exit;
+if [ -o --fix ]
+then
+    phpcbf --ignore=*.blade.php --tab-width=4 --standard=PSR2 -p .
+else
+    phpcs --ignore=*.blade.php --tab-width=4 --standard=PSR2 -p .
+fi

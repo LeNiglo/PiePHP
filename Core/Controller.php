@@ -2,14 +2,9 @@
 
 namespace Core;
 
-use Core\TemplateEngine;
-
-/**
-*
-*/
 class Controller
 {
-    protected $request = null;
+    protected $request;
     private static $_render;
 
     public function __construct()
@@ -35,34 +30,34 @@ class Controller
 
         if (file_exists($f_tpl)) {
             ob_start();
-            eval(' ?>'.$tpl->parse($f_tpl));
+            eval(' ?>' . $tpl->parse($f_tpl));
             $_view = ob_get_clean();
         } elseif (file_exists($f)) {
             ob_start();
             include $f;
             $_view = ob_get_clean();
         } else {
-            echo "View '$f' not found.";
+            echo "View '${f}' not found.";
             die;
         }
 
         if (file_exists($l_tpl)) {
             ob_start();
-            eval(' ?>'.$tpl->parse($l_tpl));
+            eval(' ?>' . $tpl->parse($l_tpl));
             self::$_render = ob_get_clean();
         } elseif (file_exists($l)) {
             ob_start();
             include $l;
             self::$_render = ob_get_clean();
         } else {
-            echo "Layout '$l' not found.";
+            echo "Layout '${l}' not found.";
             die;
         }
     }
 
     protected function redirect($route = '/')
     {
-        if (substr($route, 0, 4) === 'http') {
+        if ('http' === substr($route, 0, 4)) {
             header('Location: ' . $route);
         } else {
             header('Location: ' . route($route));

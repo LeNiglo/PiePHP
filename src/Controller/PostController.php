@@ -2,31 +2,30 @@
 
 namespace Controller;
 
-use \Core\Controller;
+use Core\Controller;
+use Model\PostModel;
 
-use \Model\UserModel;
-use \Model\PostModel;
-
-/**
-*
-*/
 class PostController extends Controller
 {
     public function index()
     {
-        $this->render('welcome', [
+        $this->render(
+            'welcome', [
             'posts' => PostModel::query()->orderBy('id', 'DESC')->limit(1)->get(),
-        ]);
+            ]
+        );
     }
 
     public function submit()
     {
-        if ($this->request->method() === 'POST') {
-            $post = new PostModel([
+        if ('POST' === $this->request->method()) {
+            $post = new PostModel(
+                [
                 'title' => $this->request->title,
                 'content' => $this->request->content,
                 'user_id' => $this->request->user_id,
-            ]);
+                ]
+            );
             $post->save();
             $this->redirect($this->request->back());
         }
@@ -35,9 +34,11 @@ class PostController extends Controller
 
     public function list()
     {
-        $this->render('post.list', [
+        $this->render(
+            'post.list', [
             'posts' => PostModel::findAll(),
-        ]);
+            ]
+        );
     }
 
     public function show($id)
@@ -46,8 +47,10 @@ class PostController extends Controller
         if (is_null($post)) {
             $this->redirect($this->request->back());
         }
-        $this->render('post.show', [
+        $this->render(
+            'post.show', [
             'post' => $post,
-        ]);
+            ]
+        );
     }
 }

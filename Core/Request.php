@@ -2,9 +2,6 @@
 
 namespace Core;
 
-/**
-*
-*/
 class Request
 {
     private $_get = [];
@@ -24,22 +21,24 @@ class Request
     {
         if (array_key_exists($value, $this->_get)) {
             return $this->_get[$value];
-        } elseif (array_key_exists($value, $this->_post)) {
-            return $this->_post[$value];
-        } else {
-            return null;
         }
+        if (array_key_exists($value, $this->_post)) {
+            return $this->_post[$value];
+        }
+
+        return null;
     }
 
     public function has($value)
     {
         if (array_key_exists($value, $this->_get)) {
             return true;
-        } elseif (array_key_exists($value, $this->_post)) {
-            return true;
-        } else {
-            return false;
         }
+        if (array_key_exists($value, $this->_post)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function all()

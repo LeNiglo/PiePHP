@@ -13,6 +13,7 @@ PHP Framework from scratch
 - [x] Logger
 - [x] Facade System
 - [x] Fix relationships too permissive (see /u/{id})
+- [ ] File Generator
 - [ ] Migrations based on Entity
 - [ ] Aggregates in QueryBuilder
 - [x] Logger as a Facade

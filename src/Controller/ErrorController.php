@@ -2,11 +2,8 @@
 
 namespace Controller;
 
-use \Core\Controller;
+use Core\Controller;
 
-/**
-*
-*/
 class ErrorController extends Controller
 {
     public function notfound()

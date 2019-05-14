@@ -2,16 +2,13 @@
 
 namespace Model;
 
-use \Core\Entity;
+use Core\Entity;
 
-/**
-*
-*/
 class UserModel extends Entity
 {
     protected static $_table = 'user';
     protected static $_id = 'id';
-    protected static $_fields = ['name', 'email', 'password',];
+    protected static $_fields = ['name', 'email', 'password'];
 
     public function posts()
     {

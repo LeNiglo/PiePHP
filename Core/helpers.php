@@ -9,19 +9,23 @@ function dd()
 
 function dump()
 {
-    echo '<pre>';
+    if (PHP_SAPI !== 'cli') {
+        echo '<pre>';
+    }
     $args = func_get_args();
     foreach ($args as $arg) {
         call_user_func_array('var_dump', [$arg]);
     }
-    echo '</pre>';
+    if (PHP_SAPI !== 'cli') {
+        echo '</pre>';
+    }
 }
 
 function route($name = '', $params = [])
 {
     $route = \Core\Router::findNamedRoute($name, $params);
+
     return BASE_URI . '/' . trim($route ?? $name, '/');
-    ;
 }
 
 function asset($path = '')
@@ -30,5 +34,5 @@ function asset($path = '')
 }
 
 if (file_exists('../src/helpers.php')) {
-    require_once '../src/helpers.php';
+    include_once '../src/helpers.php';
 }

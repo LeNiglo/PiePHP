@@ -2,12 +2,9 @@
 
 namespace Core;
 
-use \Core\Database\ORM;
-use \Core\Database\QueryBuilder;
+use Core\Database\ORM;
+use Core\Database\QueryBuilder;
 
-/**
-*
-*/
 abstract class Entity
 {
     protected static $_table = null;
@@ -26,11 +23,16 @@ abstract class Entity
         $this->set($params);
     }
 
+    final public function __set($property, $value)
+    {
+        $this->set($property, $value);
+    }
+
     public static function guessEntity($table)
     {
         $possibilities = [
             '\\Model\\' . ucfirst($table) . 'Model',
-            '\\Model\\' . ucfirst(rtrim($table, 's')) . 'Model'
+            '\\Model\\' . ucfirst(rtrim($table, 's')) . 'Model',
         ];
 
         foreach ($possibilities as $class) {
@@ -38,6 +40,7 @@ abstract class Entity
                 return $class;
             }
         }
+
         return null;
     }
 
@@ -76,11 +79,6 @@ abstract class Entity
         return $this->get($property);
     }
 
-    final public function __set($property, $value)
-    {
-        $this->set($property, $value);
-    }
-
     public static function query()
     {
         return new QueryBuilder(self::getTable());
@@ -91,45 +89,47 @@ abstract class Entity
         $value = null;
         if (method_exists($this, $property)) {
             if (!array_key_exists($property, $this->_relationships)) {
-                $this->_relationships[$property] = $this->$property();
+                $this->_relationships[$property] = $this->{$property}();
             }
-            $value =& $this->_relationships[$property];
+            $value = &$this->_relationships[$property];
         } elseif (array_key_exists($property, $this->_properties)) {
-            $value =& $this->_properties[$property];
+            $value = &$this->_properties[$property];
         }
+
         return $value;
     }
 
     public function set($property, $value = null)
     {
-        if (is_string($property) && $property !== '') {
+        if (is_string($property) && '' !== $property) {
             $property = [$property => $value];
         }
 
         // Use correct types :)
-        array_map(function ($value) {
-            if ($value == "NULL") {
-                $value = null;
-            } elseif (is_numeric($value)) {
-                $value += 0;
-            } elseif (($tmp = \DateTime::createFromFormat('Y-m-d G:i:s', $value)) !== false) {
-                $value = $tmp;
-            } elseif (is_bool($value)) {
-                settype($value, 'bool');
-            }
-            return $value;
-        }, $property);
+        array_map(
+            function ($value) {
+                if ('NULL' == $value) {
+                    $value = null;
+                } elseif (is_numeric($value)) {
+                    $value += 0;
+                } elseif (false !== ($tmp = \DateTime::createFromFormat('Y-m-d G:i:s', $value))) {
+                    $value = $tmp;
+                } elseif (is_bool($value)) {
+                    settype($value, 'bool');
+                }
+
+                return $value;
+            }, $property
+        );
 
         foreach ($property as $p => $value) {
-            if (
-                array_key_exists($p, $this->_properties) &&
-                $this->_properties[$p] !== $value
+            if (array_key_exists($p, $this->_properties) 
+                && $this->_properties[$p] !== $value
             ) {
                 $this->_dirty[$p] = true;
                 $this->_properties[$p] = $value;
-            } elseif (
-                in_array($p, static::$_fields) ||
-                $p == static::getId()
+            } elseif (in_array($p, static::$_fields) 
+                || $p == static::getId()
             ) {
                 $this->_original[$p] = $value;
                 $this->_properties[$p] = $value;
@@ -141,9 +141,9 @@ abstract class Entity
     {
         if (!isset($this->_original[static::getId()])) {
             return $this->insert();
-        } else {
-            return $this->update();
         }
+
+        return $this->update();
     }
 
     public function insert()
@@ -177,11 +177,11 @@ abstract class Entity
         $class = get_called_class();
         $results = ORM::getInstance()->find(static::getTable(), [static::getId() => $id]);
 
-        if (!!$results && count($results) > 0) {
+        if ((bool) $results && count($results) > 0) {
             return new $class($results[0]);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public static function findAll($conditions = [])
@@ -189,10 +189,12 @@ abstract class Entity
         $class = get_called_class();
         $results = ORM::getInstance()->find(static::getTable(), $conditions);
 
-        if (!!$results && count($results) > 0) {
-            return array_map(function ($entity) use ($class) {
-                return new $class($entity);
-            }, $results);
+        if ((bool) $results && count($results) > 0) {
+            return array_map(
+                function ($entity) use ($class) {
+                    return new $class($entity);
+                }, $results
+            );
         } else {
             return [];
         }
@@ -201,7 +203,7 @@ abstract class Entity
     final protected function hasMany($class, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+            throw new \Exception("Class ${class} does not exists or isn't a \\Core\\Entity.");
         }
         if (is_null($fk)) {
             $fk = static::guessId();
@@ -213,48 +215,54 @@ abstract class Entity
     final protected function hasOne($class, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+            throw new \Exception("Class ${class} does not exists or isn't a \\Core\\Entity.");
         }
         if (is_null($fk)) {
             $fk = $class::guessId();
         }
 
         $array = $class::findAll([$fk => $this->{static::getId()}]);
+
         return $array[0] ?? null;
     }
 
     final protected function belongsTo($class, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+            throw new \Exception("Class ${class} does not exists or isn't a \\Core\\Entity.");
         }
         if (is_null($fk)) {
             $fk = $class::getId();
         }
 
         $array = $class::findAll([$fk => $this->{$class::guessId()}]);
+
         return $array[0] ?? null;
     }
 
     final protected function belongsToMany($class, $pivotTable, $fk = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+            throw new \Exception("Class ${class} does not exists or isn't a \\Core\\Entity.");
         }
         if (is_null($fk)) {
             $fk = $class::guessId();
         }
 
         $pivotArray = ORM::getInstance()->find($pivotTable, [static::guessId() => $this->{static::getId()}]);
-        $pivotArray = array_map(function ($a) use ($fk) {
-            return $a[$fk];
-        }, $pivotArray);
+        $pivotArray = array_map(
+            function ($a) use ($fk) {
+                return $a[$fk];
+            }, $pivotArray
+        );
 
         $array = Orm::getInstance()->findIn($class::getTable(), $class::getId(), $pivotArray);
-        if (!!$array && count($array) > 0) {
-            return array_map(function ($entity) use ($class) {
-                return new $class($entity);
-            }, $array);
+        if ((bool) $array && count($array) > 0) {
+            return array_map(
+                function ($entity) use ($class) {
+                    return new $class($entity);
+                }, $array
+            );
         } else {
             return [];
         }
@@ -263,25 +271,29 @@ abstract class Entity
     final protected function hasManyThrough($class, $pivotClass, $fk1 = null)
     {
         if (!class_exists($class) || !is_subclass_of($class, '\Core\Entity')) {
-            throw new \Exception("Class $class does not exists or isn't a \Core\Entity.");
+            throw new \Exception("Class ${class} does not exists or isn't a \\Core\\Entity.");
         }
         if (!class_exists($pivotClass) || !is_subclass_of($pivotClass, '\Core\Entity')) {
-            throw new \Exception("Class $pivotClass does not exists or isn't a \Core\Entity.");
+            throw new \Exception("Class ${pivotClass} does not exists or isn't a \\Core\\Entity.");
         }
         if (is_null($fk1)) {
             $fk1 = $pivotClass::getId();
         }
 
         $pivotArray = ORM::getInstance()->find($pivotClass::getTable(), [static::guessId() => $this->{static::getId()}]);
-        $pivotArray = array_map(function ($a) use ($fk1) {
-            return $a[$fk1];
-        }, $pivotArray);
+        $pivotArray = array_map(
+            function ($a) use ($fk1) {
+                return $a[$fk1];
+            }, $pivotArray
+        );
 
         $array = Orm::getInstance()->findIn($class::getTable(), $class::getId(), $pivotArray);
-        if (!!$array && count($array) > 0) {
-            return array_map(function ($entity) use ($class) {
-                return new $class($entity);
-            }, $array);
+        if ((bool) $array && count($array) > 0) {
+            return array_map(
+                function ($entity) use ($class) {
+                    return new $class($entity);
+                }, $array
+            );
         } else {
             return [];
         }
