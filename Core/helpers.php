@@ -19,14 +19,19 @@ function dump()
 
 function route($path = '')
 {
-    return BASE_URI . '/' . trim($path, '/');
+    return BASE_URI.'/'.trim($path, '/');
 }
 
 function asset($path = '')
 {
-    return BASE_URI . '/public/' . trim($path, '/');
+    return BASE_URI.'/public/'.trim($path, '/');
 }
 
-if (file_exists('../src/helpers.php')) {
-    require_once '../src/helpers.php';
+function env($variable, $default = null)
+{
+    return get_defined_constants(true)['user'][$variable] ?? $default;
+}
+
+if (file_exists('src/helpers.php')) {
+    require_once 'src/helpers.php';
 }
