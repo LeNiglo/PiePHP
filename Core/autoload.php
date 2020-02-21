@@ -6,23 +6,23 @@ spl_autoload_register(function ($class) {
         $file = implode(
             DIRECTORY_SEPARATOR,
         [
-            '..', str_replace('\\', DIRECTORY_SEPARATOR, $class)
+            str_replace('\\', DIRECTORY_SEPARATOR, $class),
         ]
-        ) . '.php';
+        ).'.php';
     } elseif (preg_match('/(Controller|Model)$/', $class)) {
         $file = implode(
             DIRECTORY_SEPARATOR,
         [
-            '..', 'src', str_replace('\\', DIRECTORY_SEPARATOR, $class)
+            'src', str_replace('\\', DIRECTORY_SEPARATOR, $class),
         ]
-        ) . '.php';
+        ).'.php';
     } else {
         $file = implode(
             DIRECTORY_SEPARATOR,
         [
-            '..', str_replace('\\', DIRECTORY_SEPARATOR, $class)
+            str_replace('\\', DIRECTORY_SEPARATOR, $class),
         ]
-        ) . '.php';
+        ).'.php';
     }
     if (file_exists($file)) {
         include $file;

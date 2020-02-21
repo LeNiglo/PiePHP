@@ -1,0 +1,16 @@
+#!/bin/env php
+<?php
+
+$executable = array_shift($argv);
+$command = array_shift($argv);
+
+if (function_exists($command)) {
+    exit(call_user_func_array($command, $argv));
+}
+
+function serve($port = '8000')
+{
+    $port = intval($port);
+
+    return exec(sprintf('%s -S %s:%s %s', PHP_BINARY, 'localhost', $port, 'server.php'));
+}

@@ -2,25 +2,22 @@
 
 namespace Core;
 
-/**
-*
-*/
 class Core
 {
     public function __construct()
     {
         session_start();
-        require_once __DIR__ . '/helpers.php';
+        require_once __DIR__.'/helpers.php';
         self::dotenv();
         self::createFacades();
-        require_once '../src/routes.php';
+        require_once 'src/routes.php';
     }
 
     public function run()
     {
         try {
             $route = Router::get($_SERVER['REQUEST_URI']);
-            $controllerName = 'Controller\\' . ucfirst($route['c']) . 'Controller';
+            $controllerName = 'Controller\\'.ucfirst($route['c']).'Controller';
             $actionName = $route['a'];
 
             if (class_exists($controllerName)) {
@@ -36,8 +33,8 @@ class Core
 
     public static function dotenv()
     {
-        if (file_exists('../.env')) {
-            $handle = fopen('../.env', 'r');
+        if (file_exists('.env')) {
+            $handle = fopen('.env', 'r');
             if ($handle) {
                 while (($line = fgets($handle)) !== false) {
                     if (!empty($line = trim($line))) {
