@@ -40,7 +40,7 @@ class Auth
         if ($user) {
             if (password_verify($password, $user->password)) {
                 static::$_user = $user;
-                $_SESSION[self::AUTH_KEY] = static::$_user->{$auth_id};
+                $_SESSION[self::AUTH_KEY] = static::$_user->$auth_id;
 
                 return true;
             }
@@ -68,11 +68,7 @@ class Auth
         $auth_class = env('AUTH_MODEL', self::DEFAULT_AUTH_MODEL);
         $auth_id = $auth_class::getId();
 
-<<<<<<< HEAD
-        return static::user()->{$auth_id};
-=======
         return static::user()->$auth_id;
->>>>>>> master
     }
 
     public static function logout()
