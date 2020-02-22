@@ -4,7 +4,7 @@ namespace Core;
 
 class Logger
 {
-    const LOG_FILENAME = '../logs/piephp.log';
+    const LOG_FILENAME = 'logs/piephp.log';
     protected static $_instance = null;
     private $handle;
 
@@ -53,6 +53,6 @@ class Logger
             $str = json_encode($str);
         }
         $date = date('Y-m-d H:i:s');
-        fwrite($this->handle, "[{$date}][{$level}] {$str}" . PHP_EOL);
+        fwrite($this->handle, "[{$date}][{$level}] {$str}".PHP_EOL);
     }
 }

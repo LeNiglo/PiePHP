@@ -22,15 +22,15 @@ class Controller
         extract($scope);
         $tpl = new TemplateEngine();
 
-        $f = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'src', 'View', str_replace('.', DIRECTORY_SEPARATOR, $view)]) . '.php';
-        $f_tpl = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'src', 'View', str_replace('.', DIRECTORY_SEPARATOR, $view)]) . '.blade.php';
+        $f = implode(DIRECTORY_SEPARATOR, [__DIR__, 'src', 'View', str_replace('.', DIRECTORY_SEPARATOR, $view)]).'.php';
+        $f_tpl = implode(DIRECTORY_SEPARATOR, [__DIR__, 'src', 'View', str_replace('.', DIRECTORY_SEPARATOR, $view)]).'.blade.php';
 
-        $l = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'src', 'View', $layout]) . '.php';
-        $l_tpl = implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'src', 'View', $layout]) . '.blade.php';
+        $l = implode(DIRECTORY_SEPARATOR, [__DIR__, 'src', 'View', $layout]).'.php';
+        $l_tpl = implode(DIRECTORY_SEPARATOR, [__DIR__, 'src', 'View', $layout]).'.blade.php';
 
         if (file_exists($f_tpl)) {
             ob_start();
-            eval(' ?>' . $tpl->parse($f_tpl));
+            eval(' ?>'.$tpl->parse($f_tpl));
             $_view = ob_get_clean();
         } elseif (file_exists($f)) {
             ob_start();
@@ -43,7 +43,7 @@ class Controller
 
         if (file_exists($l_tpl)) {
             ob_start();
-            eval(' ?>' . $tpl->parse($l_tpl));
+            eval(' ?>'.$tpl->parse($l_tpl));
             self::$_render = ob_get_clean();
         } elseif (file_exists($l)) {
             ob_start();
@@ -58,9 +58,9 @@ class Controller
     protected function redirect($route = '/')
     {
         if ('http' === substr($route, 0, 4)) {
-            header('Location: ' . $route);
+            header('Location: '.$route);
         } else {
-            header('Location: ' . route($route));
+            header('Location: '.route($route));
         }
         die;
     }

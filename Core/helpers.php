@@ -25,14 +25,19 @@ function route($name = '', $params = [])
 {
     $route = \Core\Router::findNamedRoute($name, $params);
 
-    return BASE_URI . '/' . trim($route ?? $name, '/');
+    return BASE_URI.'/'.trim($route ?? $name, '/');
 }
 
 function asset($path = '')
 {
-    return BASE_URI . '/public/' . trim($path, '/');
+    return BASE_URI.'/public/'.trim($path, '/');
 }
 
-if (file_exists('../src/helpers.php')) {
-    include_once '../src/helpers.php';
+function env($variable, $default = null)
+{
+    return get_defined_constants(true)['user'][$variable] ?? $default;
+}
+
+if (file_exists('src/helpers.php')) {
+    require_once 'src/helpers.php';
 }

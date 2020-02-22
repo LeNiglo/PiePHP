@@ -11,11 +11,13 @@ class Auth
 
     public static function check()
     {
+        $auth_class = env('AUTH_MODEL', self::DEFAULT_AUTH_MODEL);
+
         if (!is_null(static::$_user)) {
             return true;
         }
-        if (isset($_SESSION[static::AUTH_KEY])) {
-            $u = static::getAuthModel()::find($_SESSION[static::AUTH_KEY]);
+        if (isset($_SESSION[self::AUTH_KEY])) {
+            $u = $auth_class()::find($_SESSION[self::AUTH_KEY]);
             if (!is_null($u)) {
                 static::$_user = $u;
 
@@ -31,14 +33,14 @@ class Auth
     public static function attempt($email, $password)
     {
         $error = false;
-        $auth_class = static::getAuthModel();
+        $auth_class = env('AUTH_MODEL', self::DEFAULT_AUTH_MODEL);
         $auth_id = $auth_class::getId();
 
         $user = $auth_class::query()->where('email', $email)->first();
         if ($user) {
             if (password_verify($password, $user->password)) {
                 static::$_user = $user;
-                $_SESSION[static::AUTH_KEY] = static::$_user->{$auth_id};
+                $_SESSION[self::AUTH_KEY] = static::$_user->{$auth_id};
 
                 return true;
             }
@@ -63,19 +65,18 @@ class Auth
 
     public static function id()
     {
-        $auth_class = static::getAuthModel();
+        $auth_class = env('AUTH_MODEL', self::DEFAULT_AUTH_MODEL);
         $auth_id = $auth_class::getId();
 
+<<<<<<< HEAD
         return static::user()->{$auth_id};
+=======
+        return static::user()->$auth_id;
+>>>>>>> master
     }
 
     public static function logout()
     {
-        unset($_SESSION[static::AUTH_KEY]);
-    }
-
-    private static function getAuthModel()
-    {
-        return AUTH_MODEL ?? static::DEFAULT_AUTH_MODEL;
+        unset($_SESSION[self::AUTH_KEY]);
     }
 }

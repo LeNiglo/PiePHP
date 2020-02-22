@@ -19,7 +19,13 @@ class Database
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
-            self::$_instance = new PDO('mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+            $host = env('DB_HOST', 'localhost');
+            $port = env('DB_PORT', '3306');
+            $name = env('DB_NAME', 'piephp');
+            $user = env('DB_USER', 'root');
+            $pass = env('DB_PASS', '');
+
+            self::$_instance = new PDO("mysql:host=$host;port=$port;dbname=$name;charset=utf8", $user, $pass);
             self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$_instance->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
             self::$_instance->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
