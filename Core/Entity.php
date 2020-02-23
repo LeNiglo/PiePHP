@@ -1,9 +1,9 @@
 <?php
 
-namespace Core;
+namespace PiePHP\Core;
 
-use Core\Database\ORM;
-use Core\Database\QueryBuilder;
+use PiePHP\Core\Database\ORM;
+use PiePHP\Core\Database\QueryBuilder;
 
 abstract class Entity
 {
@@ -105,7 +105,7 @@ abstract class Entity
             $property = [$property => $value];
         }
 
-        // Use correct types :)
+        // use PiePHP\Correct types :)
         array_map(
             function ($value) {
                 if ('NULL' == $value) {
@@ -123,12 +123,12 @@ abstract class Entity
         );
 
         foreach ($property as $p => $value) {
-            if (array_key_exists($p, $this->_properties) 
+            if (array_key_exists($p, $this->_properties)
                 && $this->_properties[$p] !== $value
             ) {
                 $this->_dirty[$p] = true;
                 $this->_properties[$p] = $value;
-            } elseif (in_array($p, static::$_fields) 
+            } elseif (in_array($p, static::$_fields)
                 || $p == static::getId()
             ) {
                 $this->_original[$p] = $value;

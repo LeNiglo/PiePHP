@@ -1,8 +1,8 @@
 <?php
 
-namespace Model;
+namespace App\Model;
 
-use Core\Entity;
+use PiePHP\Core\Entity;
 
 class PostModel extends Entity
 {
@@ -10,11 +10,11 @@ class PostModel extends Entity
 
     public function user()
     {
-        return $this->belongsTo(\Model\UserModel::class);
+        return $this->belongsTo(\App\Model\UserModel::class);
     }
 
     public function tags()
     {
-        return $this->belongsToMany(\Model\TagModel::class, 'posts_tags');
+        return $this->belongsToMany(\App\Model\TagModel::class, 'posts_tags');
     }
 }

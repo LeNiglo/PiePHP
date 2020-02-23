@@ -1,17 +1,18 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Core\Controller;
-use Model\PostModel;
+use App\Model\PostModel;
+use PiePHP\Core\Controller;
 
 class PostController extends Controller
 {
     public function index()
     {
+        echo __METHOD__;
         $this->render(
             'welcome', [
-            'posts' => PostModel::query()->orderBy('id', 'DESC')->limit(1)->get(),
+                'posts' => PostModel::query()->orderBy('id', 'DESC')->limit(1)->get(),
             ]
         );
     }

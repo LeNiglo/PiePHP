@@ -1,0 +1,17 @@
+{
+    "name": "leniglo/piephp",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Guillaume Lefrant",
+            "email": "lefrantguillaume@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "PiePHP\\Core\\": "Core/",
+            "App\\": "src/"
+        }
+    }
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Facade;
+namespace PiePHP\Core\Facade;
 
 class Auth
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace PiePHP\Core;
 
 class Core
 {
@@ -17,6 +17,7 @@ class Core
     {
         try {
             $route = Router::get($_SERVER['REQUEST_URI']);
+            dump($route);
             $route->callable->__invoke($route->params);
             // $controllerName = 'Controller\\'.ucfirst($route['c']).'Controller';
             // $actionName = $route['a'];
@@ -51,8 +52,8 @@ class Core
     public static function createFacades()
     {
         $facades = [
-            'Auth' => \Core\Facade\Auth::class,
-            'Log' => \Core\Facade\Log::class,
+            'Auth' => \PiePHP\Core\Facade\Auth::class,
+            'Log' => \PiePHP\Core\Facade\Log::class,
         ];
 
         foreach ($facades as $facade => $class) {

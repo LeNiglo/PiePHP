@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Database;
+namespace PiePHP\Core\Database;
 
-use Core\Entity;
+use PiePHP\Core\Entity;
 
 class QueryBuilder
 {

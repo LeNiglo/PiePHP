@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-require_once implode(DIRECTORY_SEPARATOR, ['Core', 'autoload.php']);
+require_once __DIR__.'/vendor/autoload.php';
 
-$cli = new \Core\CLI\CLI();
+$cli = new \PiePHP\Core\CLI\CLI();
 
 return $cli->run($argv);

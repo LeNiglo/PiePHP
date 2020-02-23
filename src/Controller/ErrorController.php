@@ -1,8 +1,8 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Core\Controller;
+use PiePHP\Core\Controller;
 
 class ErrorController extends Controller
 {

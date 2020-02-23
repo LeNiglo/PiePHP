@@ -1,8 +1,8 @@
 <?php
 
-namespace Model;
+namespace App\Model;
 
-use Core\Entity;
+use PiePHP\Core\Entity;
 
 class UserModel extends Entity
 {
@@ -12,6 +12,6 @@ class UserModel extends Entity
 
     public function posts()
     {
-        return $this->hasMany(\Model\PostModel::class);
+        return $this->hasMany(\App\Model\PostModel::class);
     }
 }

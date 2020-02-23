@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Facade;
+namespace PiePHP\Core\Facade;
 
-use Core\Logger;
+use PiePHP\Core\Logger;
 
 class Log
 {

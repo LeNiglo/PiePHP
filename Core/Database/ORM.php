@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Database;
+namespace PiePHP\Core\Database;
 
 class ORM
 {

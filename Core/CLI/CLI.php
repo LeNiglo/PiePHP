@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\CLI;
+namespace PiePHP\Core\CLI;
 
 class CLI
 {

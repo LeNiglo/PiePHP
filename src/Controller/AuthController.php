@@ -1,9 +1,9 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Core\Controller;
-use Model\UserModel;
+use App\Model\UserModel;
+use PiePHP\Core\Controller;
 
 class AuthController extends Controller
 {

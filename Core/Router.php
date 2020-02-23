@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace PiePHP\Core;
 
 class Router
 {
@@ -15,16 +15,18 @@ class Router
                         $url = preg_replace("/\{$key\}/", $value, $url);
                     }
                 }
+
                 return $url;
             }
         }
+
         return null;
     }
 
     public static function &connect($url, $route)
     {
         $url = self::cleanUrl($url);
-        self::$_routes[$url] = new class {
+        self::$_routes[$url] = new class() {
             public $controller = null;
             public $action = null;
             public $callable = null;
@@ -34,6 +36,7 @@ class Router
             public function name($value)
             {
                 $this->name = $value;
+
                 return $this;
             }
 
@@ -42,13 +45,14 @@ class Router
                 if (is_array($value)) {
                     $this->params = $value;
                 }
+
                 return $this;
             }
         };
 
         if (is_string($route)) {
             $expl = explode('@', $route);
-            $expl[0] = "\\Controller\\{$expl[0]}";
+            $expl[0] = "\\App\\Controller\\{$expl[0]}";
             self::$_routes[$url]->controller = $expl[0];
             self::$_routes[$url]->action = $expl[1];
             self::$_routes[$url]->callable = self::createCallable($expl[0], $expl[1]);
@@ -64,13 +68,15 @@ class Router
         $url = self::cleanUrl($url);
         if (array_key_exists($url, self::$_routes)) {
             \Log::debug(self::$_routes[$url]);
+
             return self::$_routes[$url];
         } else {
             foreach (self::$_routes as $route_url => $route) {
                 $route_url = preg_replace_callback(
                     '/{([a-zA-Z]+?)}/', function (array $matches) use ($route) {
                         array_shift($matches);
-                        return !empty($route->params[$matches[0]]) ? "({$route->params[$matches[0]]})" : "(.+?)";
+
+                        return !empty($route->params[$matches[0]]) ? "({$route->params[$matches[0]]})" : '(.+?)';
                     }, $route_url
                 );
                 $matches = [];
@@ -82,15 +88,17 @@ class Router
                         }, $matches
                     );
                     \Log::debug($route);
+
                     return $route;
                 }
             }
 
-            $error = new class {
+            $error = new class() {
                 public $callable = null;
                 public $params = [];
             };
-            $error->callable = self::createCallable('\\Controller\\ErrorController', 'notfound');
+            $error->callable = self::createCallable('\\App\\Controller\\ErrorController', 'notfound');
+
             return $error;
         }
     }
@@ -107,7 +115,11 @@ class Router
                     $controller = new $controllerName();
                     if (method_exists($controller, $actionName)) {
                         return call_user_func_array([$controller, $actionName], $params);
+                    } else {
+                        throw new \RuntimeException("Method $actionName in $controllerName not found.");
                     }
+                } else {
+                    throw new \RuntimeException("Class $controllerName not found.");
                 }
             };
         }
@@ -119,6 +131,7 @@ class Router
         if ($url !== '/') {
             $url = rtrim($url, '/');
         }
+
         return $url;
     }
 }

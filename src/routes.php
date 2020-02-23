@@ -1,6 +1,6 @@
 <?php
 
-use Core\Router;
+use PiePHP\Core\Router;
 
 Router::connect('/register', 'AuthController@register')->name('register');
 Router::connect('/login', 'AuthController@login')->name('login');
