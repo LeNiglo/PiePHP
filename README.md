@@ -20,3 +20,8 @@ PHP Framework from scratch
 - [ ] Authenticable Trait or Interface (extends Entity)
 - [x] Router with name
 - [x] Router with Laravel format 'Controller@method'
+- [ ] Package Framework for packagist in PiePHP-framework
+- [ ] Adapter and Connection for various datasource (mysql, sqlite, postgre, ...)
+- [ ] ServiceProvider
+- [ ] Split authentication in its own package for a proof of extensibility
+- [ ] Router middleware
